@@ -649,7 +649,27 @@ footer h4{
     width:100%;
   }
 }
-</style>
+  .hero{
+  background:
+    linear-gradient(90deg, rgba(5,5,5,.98) 0%, rgba(5,5,5,.82) 38%, rgba(5,5,5,.20) 78%, rgba(5,5,5,.30) 100%),
+    url("../hero.png") center right / cover no-repeat;
+}
+
+.car-visual{
+  display:none !important;
+}
+
+@media(max-width:900px){
+  .hero{
+    background-position:center right;
+  }
+}
+
+@media(max-width:600px){
+  .hero{
+    background-position:65% center;
+  }
+}</style>
 </head>
 
 <body>
