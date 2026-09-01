@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="D.M. Company — VTC particulier premium. Transferts aéroports, gares, hôtels et déplacements professionnels.">
+<title>D.M. Company — VTC Premium</title>
+
+<style>
+:root{
+  --black:#050505;
+  --black2:#0c0c0c;
+  --gold:#c9a45c;
+  --gold2:#e2c27b;
+  --white:#f7f5ef;
+  --muted:#aaa49a;
+  --border:rgba(201,164,92,.25);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--black);
+  color:var(--white);
+  line-height:1.6;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.container{
+  width:min(1180px,92%);
+  margin:auto;
+}
+
+/* HEADER */
+
+header{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:1000;
+  background:rgba(5,5,5,.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+
+.nav{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:800;
+  letter-spacing:3px;
+  color:var(--gold2);
+}
+
+.logo span{
+  display:block;
+  font-size:9px;
+  letter-spacing:4px;
+  color:#fff;
+  margin-top:-3px;
+}
+
+nav{
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+
+nav a{
+  font-size:13px;
+  color:#ddd;
+  transition:.2s;
+}
+
+nav a:hover{
+  color:var(--gold2);
+}
+
+.nav-wa{
+  border:1px solid var(--gold);
+  padding:10px 15px;
+  border-radius:30px;
+  color:var(--gold2);
+}
+
+/* HERO */
+
+.hero{
+  min-height:100vh;
+  padding-top:76px;
+  display:flex;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 80% 40%,rgba(201,164,92,.15),transparent 35%),
+    linear-gradient(135deg,#050505,#111 55%,#050505);
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:500px;
+  height:500px;
+  right:-220px;
+  top:100px;
+  border:1px solid rgba(201,164,92,.15);
+  border-radius:50%;
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:600px;
+  padding:70px 0;
+}
+
+.kicker{
+  color:var(--gold2);
+  letter-spacing:4px;
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+h1{
+  font-size:clamp(42px,7vw,76px);
+  line-height:1.02;
+  letter-spacing:-2px;
+  margin-bottom:24px;
+}
+
+h1 span{
+  color:var(--gold2);
+}
+
+.hero-text{
+  color:#c9c5bd;
+  max-width:540px;
+  font-size:17px;
+  margin-bottom:34px;
+}
+
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:13px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px 23px;
+  border-radius:5px;
+  font-size:12px;
+  font-weight:bold;
+  letter-spacing:1.3px;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.btn-gold{
+  background:var(--gold);
+  color:#090909;
+}
+
+.btn-gold:hover{
+  background:var(--gold2);
+  transform:translateY(-2px);
+}
+
+.btn-outline{
+  border:1px solid var(--gold);
+  color:var(--gold2);
+}
+
+.btn-outline:hover{
+  background:rgba(201,164,92,.1);
+}
+
+/* CAR VISUAL */
+
+.car-visual{
+  position:absolute;
+  right:3%;
+  bottom:8%;
+  width:min(540px,45vw);
+  height:300px;
+  z-index:1;
+}
+
+.car-glow{
+  position:absolute;
+  bottom:40px;
+  left:0;
+  width:100%;
+  height:80px;
+  background:radial-gradient(ellipse,rgba(201,164,92,.28),transparent 70%);
+}
+
+.car{
+  position:absolute;
+  left:5%;
+  bottom:65px;
+  width:90%;
+  height:130px;
+  background:linear-gradient(150deg,#202020,#050505 65%);
+  border-radius:80px 100px 25px 25px;
+  border:1px solid #3c3c3c;
+  box-shadow:0 25px 45px rgba(0,0,0,.8);
+}
+
+.car:before{
+  content:"";
+  position:absolute;
+  left:25%;
+  top:-55px;
+  width:48%;
+  height:75px;
+  background:linear-gradient(145deg,#292929,#080808);
+  border:1px solid #3a3a3a;
+  border-radius:70px 90px 10px 10px;
+  transform:skewX(-8deg);
+}
+
+.window{
+  position:absolute;
+  left:31%;
+  top:-42px;
+  width:38%;
+  height:48px;
+  background:linear-gradient(135deg,#101820,#020304);
+  border-radius:50px 65px 4px 4px;
+  border:1px solid #343434;
+}
+
+.wheel{
+  position:absolute;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:#050505;
+  border:8px solid #222;
+  bottom:-22px;
+}
+
+.wheel.left{left:16%}
+.wheel.right{right:16%}
+
+.car-light{
+  position:absolute;
+  right:5%;
+  top:46px;
+  width:40px;
+  height:9px;
+  border-radius:10px;
+  background:#e9d19b;
+  box-shadow:0 0 18px #c9a45c;
+}
+
+/* FEATURES */
+
+.features{
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:#080808;
+}
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+
+.feature{
+  padding:25px 18px;
+  text-align:center;
+  border-right:1px solid var(--border);
+}
+
+.feature:last-child{border:0}
+
+.feature strong{
+  display:block;
+  color:var(--gold2);
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+.feature small{
+  color:#999;
+  font-size:11px;
+}
+
+/* SECTIONS */
+
+section{
+  padding:90px 0;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:48px;
+}
+
+.section-title .kicker{
+  margin-bottom:8px;
+}
+
+.section-title h2{
+  font-size:38px;
+}
+
+.section-title p{
+  color:var(--muted);
+  max-width:650px;
+  margin:12px auto 0;
+}
+
+/* SERVICES */
+
+.services{
+  background:#090909;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.card{
+  background:linear-gradient(145deg,#121212,#090909);
+  border:1px solid #292929;
+  padding:30px 23px;
+  min-height:230px;
+  transition:.25s;
+}
+
+.card:hover{
+  border-color:var(--gold);
+  transform:translateY(-5px);
+}
+
+.icon{
+  color:var(--gold2);
+  font-size:30px;
+  margin-bottom:18px;
+}
+
+.card h3{
+  font-size:18px;
+  margin-bottom:10px;
+}
+
+.card p{
+  color:#aaa;
+  font-size:13px;
+}
+
+/* ABOUT */
+
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:55px;
+  align-items:center;
+}
+
+.about-box{
+  border:1px solid var(--border);
+  padding:38px;
+  background:linear-gradient(145deg,#111,#070707);
+}
+
+.about-box h2{
+  font-size:38px;
+  margin-bottom:18px;
+}
+
+.about-box h2 span{
+  color:var(--gold2);
+}
+
+.about-box p{
+  color:#aaa;
+  margin-bottom:18px;
+}
+
+.checks{
+  display:grid;
+  gap:12px;
+}
+
+.check{
+  color:#ddd;
+  font-size:14px;
+}
+
+.check span{
+  color:var(--gold2);
+  margin-right:8px;
+}
+
+/* AIRPORTS */
+
+.airports{
+  background:#090909;
+}
+
+.airport-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.airport{
+  border:1px solid #292929;
+  padding:25px;
+  text-align:center;
+}
+
+.airport strong{
+  display:block;
+  color:var(--gold2);
+  font-size:18px;
+  margin-bottom:6px;
+}
+
+.airport span{
+  color:#999;
+  font-size:12px;
+}
+
+/* RESERVATION */
+
+.reservation{
+  background:
+    radial-gradient(circle at 50% 0%,rgba(201,164,92,.10),transparent 40%),
+    #050505;
+}
+
+.form{
+  max-width:850px;
+  margin:auto;
+  border:1px solid var(--border);
+  padding:35px;
+  background:#0b0b0b;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+label{
+  color:#aaa;
+  font-size:11px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+input,select,textarea{
+  width:100%;
+  background:#050505;
+  border:1px solid #303030;
+  color:#fff;
+  padding:14px;
+  border-radius:4px;
+  outline:none;
+  font:inherit;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:var(--gold);
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+.form-note{
+  margin-top:15px;
+  color:#777;
+  font-size:11px;
+}
+
+/* CTA */
+
+.cta{
+  text-align:center;
+  border-top:1px solid var(--border);
+}
+
+.cta h2{
+  font-size:38px;
+  margin-bottom:15px;
+}
+
+.cta p{
+  color:#aaa;
+  margin-bottom:25px;
+}
+
+/* FOOTER */
+
+footer{
+  padding:45px 0 25px;
+  border-top:1px solid var(--border);
+  background:#030303;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:30px;
+}
+
+.footer-logo{
+  color:var(--gold2);
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:3px;
+  margin-bottom:10px;
+}
+
+footer p,footer a{
+  color:#888;
+  font-size:13px;
+}
+
+footer h4{
+  color:#fff;
+  margin-bottom:12px;
+}
+
+.copyright{
+  border-top:1px solid #1c1c1c;
+  margin-top:30px;
+  padding-top:20px;
+  color:#555;
+  font-size:11px;
+  text-align:center;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+  nav{display:none}
+
+  .car-visual{
+    opacity:.35;
+    width:90vw;
+    right:-15%;
+  }
+
+  .feature-grid,
+  .cards,
+  .airport-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .about-grid{
+    grid-template-columns:1fr;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:600px){
+  section{padding:70px 0}
+
+  .hero-content{
+    padding:60px 0;
+  }
+
+  h1{
+    font-size:48px;
+  }
+
+  .hero-text{
+    font-size:15px;
+  }
+
+  .car-visual{
+    display:none;
+  }
+
+  .feature-grid,
+  .cards,
+  .airport-grid,
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .feature{
+    border-right:0;
+    border-bottom:1px solid var(--border);
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .form{
+    padding:22px;
+  }
+
+  .section-title h2,
+  .cta h2,
+  .about-box h2{
+    font-size:30px;
+  }
+
+  .buttons{
+    flex-direction:column;
+  }
+
+  .btn{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="#accueil" class="logo">
+      D.M. COMPANY
+      <span>VTC PARTICULIER PREMIUM</span>
+    </a>
+
+    <nav>
+      <a href="#accueil">Accueil</a>
+      <a href="#services">Nos services</a>
+      <a href="#aeroports">Aéroports</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#reservation">Réservation</a>
+      <a href="#contact">Contact</a>
+      <a href="#reservation" class="nav-wa">WhatsApp</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="hero" id="accueil">
+  <div class="container">
+    <div class="hero-content">
+
+      <div class="kicker">VTC PARTICULIER PREMIUM</div>
+
+      <h1>
+        VOTRE TRAJET,<br>
+        <span>NOTRE PRIORITÉ</span>
+      </h1>
+
+      <p class="hero-text">
+        D.M. Company vous accompagne dans tous vos déplacements
+        avec confort, élégance, ponctualité et discrétion.
+      </p>
+
+      <div class="buttons">
+        <a href="#reservation" class="btn btn-gold">
+          RÉSERVER MAINTENANT
+        </a>
+
+        <a
+          href="https://gamaeli.github.io/dm-company-calculateur/"
+          class="btn btn-outline"
+        >
+          CALCULER VOTRE COURSE
+        </a>
+      </div>
+
+    </div>
+
+    <div class="car-visual" aria-label="Véhicule premium">
+      <div class="car-glow"></div>
+      <div class="car">
+        <div class="window"></div>
+        <div class="wheel left"></div>
+        <div class="wheel right"></div>
+        <div class="car-light"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="features">
+  <div class="container feature-grid">
+
+    <div class="feature">
+      <strong>VÉHICULE PREMIUM</strong>
+      <small>BYD SEAL</small>
+    </div>
+
+    <div class="feature">
+      <strong>CHAUFFEUSE PRIVÉE</strong>
+      <small>Service personnalisé</small>
+    </div>
+
+    <div class="feature">
+      <strong>CONFORT &amp; SÉCURITÉ</strong>
+      <small>À chaque trajet</small>
+    </div>
+
+    <div class="feature">
+      <strong>PONCTUALITÉ</strong>
+      <small>Votre temps compte</small>
+    </div>
+
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="container">
+
+    <div class="section-title">
+      <div class="kicker">NOS SERVICES</div>
+      <h2>Un service pensé pour vous</h2>
+      <p>
+        Des trajets privés et professionnels adaptés à vos besoins.
+      </p>
+    </div>
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="icon">✦</div>
+        <h3>Transferts aéroports</h3>
+        <p>
+          CDG, Orly, Beauvais et Le Bourget.
+          Prise en charge et dépose à l'adresse souhaitée.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">◆</div>
+        <h3>Gares &amp; hôtels</h3>
+        <p>
+          Transferts depuis ou vers les principales gares
+          et hôtels de Paris et sa région.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">◇</div>
+        <h3>Déplacements pro</h3>
+        <p>
+          Un service discret et ponctuel pour vos rendez-vous,
+          réunions et déplacements professionnels.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">◈</div>
+        <h3>Mise à disposition</h3>
+        <p>
+          Chauffeuse privée à l'heure ou à la demi-journée
+          selon vos besoins.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="aeroports">
+  <div class="container">
+
+    <div class="section-title">
+      <div class="kicker">TRANSFERTS</div>
+      <h2>Aéroports desservis</h2>
+      <p>
+        Réservez votre transfert privé en toute simplicité.
+      </p>
+    </div>
+
+    <div class="airport-grid">
+
+      <div class="airport">
+        <strong>CDG</strong>
+        <span>Charles de Gaulle</span>
+      </div>
+
+      <div class="airport">
+        <strong>ORY</strong>
+        <span>Paris Orly</span>
+      </div>
+
+      <div class="airport">
+        <strong>BVA</strong>
+        <span>Paris Beauvais</span>
+      </div>
+
+      <div class="airport">
+        <strong>LBG</strong>
+        <span>Le Bourget</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="about" id="tarifs">
+  <div class="container about-grid">
+
+    <div>
+      <div class="kicker">D.M. COMPANY</div>
+      <h2>Le confort avant tout.</h2>
+
+      <p style="color:#aaa;margin-top:15px">
+        Notre priorité est de vous offrir une expérience de transport
+        élégante, confortable et professionnelle.
+      </p>
+    </div>
+
+    <div class="about-box">
+      <h2>Votre trajet.<br><span>Votre choix.</span></h2>
+
+      <p>
+        Calculez directement le prix de votre course grâce à notre
+        calculateur en ligne.
+      </p>
+
+      <div class="checks">
+        <div class="check"><span>✓</span> Calcul simple et rapide</div>
+        <div class="check"><span>✓</span> Tarif transparent</div>
+        <div class="check"><span>✓</span> Réservation personnalisée</div>
+      </div>
+
+      <br>
+
+      <a
+        href="https://gamaeli.github.io/dm-company-calculateur/"
+        class="btn btn-gold"
+      >
+        CALCULER MON TRAJET
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<section class="reservation" id="reservation">
+  <div class="container">
+
+    <div class="section-title">
+      <div class="kicker">RÉSERVATION</div>
+      <h2>Demander une réservation</h2>
+      <p>
+        Remplissez le formulaire et préparez votre demande de trajet.
+      </p>
+    </div>
+
+    <form class="form" id="bookingForm">
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Nom</label>
+          <input type="text" id="nom" required placeholder="Votre nom">
+        </div>
+
+        <div class="field">
+          <label>Téléphone</label>
+          <input type="tel" id="telephone" required placeholder="Votre téléphone">
+        </div>
+
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="date" required>
+        </div>
+
+        <div class="field">
+          <label>Heure</label>
+          <input type="time" id="heure" required>
+        </div>
+
+        <div class="field full">
+          <label>Départ</label>
+          <input type="text" id="depart" required placeholder="Adresse de départ">
+        </div>
+
+        <div class="field full">
+          <label>Destination</label>
+          <input type="text" id="destination" required placeholder="Adresse d'arrivée">
+        </div>
+
+        <div class="field full">
+          <label>Message</label>
+          <textarea id="message" placeholder="Informations complémentaires"></textarea>
+        </div>
+
+      </div>
+
+      <br>
+
+      <button type="submit" class="btn btn-gold">
+        ENVOYER MA DEMANDE
+      </button>
+
+      <div class="form-note">
+        * Nous ajouterons ensuite votre véritable numéro WhatsApp
+        afin que les demandes soient envoyées directement à votre entreprise.
+      </div>
+
+    </form>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="container">
+
+    <div class="kicker">D.M. COMPANY</div>
+
+    <h2>Besoin d'un chauffeur privé ?</h2>
+
+    <p>
+      Réservez votre trajet avec D.M. Company.
+    </p>
+
+    <div class="buttons" style="justify-content:center">
+
+      <a href="#reservation" class="btn btn-gold">
+        RÉSERVER
+      </a>
+
+      <a
+        href="https://gamaeli.github.io/dm-company-calculateur/"
+        class="btn btn-outline"
+      >
+        CALCULER MA COURSE
+      </a>
+
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div>
+        <div class="footer-logo">D.M. COMPANY</div>
+        <p>VTC PARTICULIER PREMIUM</p>
+        <p style="margin-top:10px">
+          Confort · Élégance · Ponctualité
+        </p>
+      </div>
+
+      <div>
+        <h4>Navigation</h4>
+        <p><a href="#accueil">Accueil</a></p>
+        <p><a href="#services">Nos services</a></p>
+        <p><a href="#aeroports">Aéroports</a></p>
+        <p><a href="#reservation">Réservation</a></p>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <p>📱 WhatsApp — à ajouter</p>
+        <p>✉️ Email — à ajouter</p>
+        <p>📍 Paris &amp; Île-de-France</p>
+      </div>
+
+    </div>
+
+    <div class="copyright">
+      © 2026 D.M. Company — VTC Premium. Tous droits réservés.
+    </div>
+
+  </div>
+</footer>
+
+<script>
+document.getElementById("bookingForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const nom = document.getElementById("nom").value;
+  const telephone = document.getElementById("telephone").value;
+  const date = document.getElementById("date").value;
+  const heure = document.getElementById("heure").value;
+  const depart = document.getElementById("depart").value;
+  const destination = document.getElementById("destination").value;
+  const message = document.getElementById("message").value;
+
+  const texte =
+`DEMANDE DE RÉSERVATION — D.M. COMPANY
+
+Nom : ${nom}
+Téléphone : ${telephone}
+Date : ${date}
+Heure : ${heure}
+Départ : ${depart}
+Destination : ${destination}
+Message : ${message}`;
+
+  navigator.clipboard.writeText(texte).then(function(){
+    alert("Votre demande a été préparée et copiée. Nous ajouterons votre WhatsApp professionnel pour l'envoi direct.");
+  }).catch(function(){
+    alert(texte);
+  });
+});
+</script>
+
+</body>
+</html>
