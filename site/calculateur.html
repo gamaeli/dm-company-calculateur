@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculer votre course — D.M. Company</title>
+
+<style>
+:root{
+  --black:#050505;
+  --gold:#c9a45c;
+  --gold2:#e2c27b;
+  --white:#f7f5ef;
+  --muted:#aaa49a;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#050505;
+  color:var(--white);
+  min-height:100vh;
+}
+
+.container{
+  width:min(700px,92%);
+  margin:auto;
+}
+
+header{
+  padding:22px 0;
+  border-bottom:1px solid rgba(201,164,92,.25);
+  text-align:center;
+}
+
+.logo{
+  color:var(--gold2);
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:3px;
+}
+
+.logo span{
+  display:block;
+  color:#fff;
+  font-size:9px;
+  letter-spacing:3px;
+  margin-top:3px;
+}
+
+main{
+  padding:55px 0;
+}
+
+.title{
+  text-align:center;
+  margin-bottom:35px;
+}
+
+.title small{
+  color:var(--gold2);
+  letter-spacing:4px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.title h1{
+  font-size:42px;
+  margin:10px 0;
+}
+
+.title p{
+  color:var(--muted);
+  font-size:15px;
+}
+
+.calculator{
+  background:#0b0b0b;
+  border:1px solid rgba(201,164,92,.3);
+  padding:30px;
+  border-radius:8px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+
+.field{
+  margin-bottom:18px;
+}
+
+label{
+  display:block;
+  color:#aaa;
+  font-size:11px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+input{
+  width:100%;
+  padding:16px;
+  background:#050505;
+  color:#fff;
+  border:1px solid #333;
+  border-radius:5px;
+  font-size:16px;
+  outline:none;
+}
+
+input:focus{
+  border-color:var(--gold);
+}
+
+button{
+  width:100%;
+  border:0;
+  padding:17px;
+  border-radius:5px;
+  background:var(--gold);
+  color:#080808;
+  font-weight:bold;
+  letter-spacing:1.2px;
+  cursor:pointer;
+  font-size:13px;
+  margin-top:5px;
+}
+
+button:hover{
+  background:var(--gold2);
+}
+
+.result{
+  display:none;
+  margin-top:28px;
+  padding-top:25px;
+  border-top:1px solid rgba(201,164,92,.25);
+  text-align:center;
+}
+
+.result.show{
+  display:block;
+}
+
+.distance{
+  color:#aaa;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.price{
+  color:var(--gold2);
+  font-size:48px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.note{
+  color:#777;
+  font-size:11px;
+  margin-bottom:20px;
+}
+
+.reserve{
+  display:block;
+  text-decoration:none;
+  background:#25D366;
+  color:#050505;
+  padding:16px;
+  border-radius:5px;
+  font-weight:bold;
+  font-size:13px;
+  letter-spacing:1px;
+}
+
+.back{
+  display:block;
+  text-align:center;
+  color:#888;
+  margin-top:25px;
+  font-size:13px;
+}
+
+.back:hover{
+  color:var(--gold2);
+}
+
+.error{
+  display:none;
+  color:#e58d8d;
+  text-align:center;
+  margin-top:15px;
+  font-size:13px;
+}
+
+@media(max-width:600px){
+  main{
+    padding:40px 0;
+  }
+
+  .title h1{
+    font-size:34px;
+  }
+
+  .calculator{
+    padding:22px;
+  }
+
+  .price{
+    font-size:42px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    D.M. COMPANY
+    <span>VTC PARTICULIER PREMIUM</span>
+  </div>
+</header>
+
+<main>
+<div class="container">
+
+  <div class="title">
+    <small>ESTIMATION DE VOTRE COURSE</small>
+    <h1>Calculez votre trajet</h1>
+    <p>Indiquez votre départ et votre destination.</p>
+  </div>
+
+  <div class="calculator">
+
+    <div class="field">
+      <label for="depart">Départ</label>
+      <input
+        id="depart"
+        type="text"
+        placeholder="Ex. Tour Eiffel, Paris"
+      >
+    </div>
+
+    <div class="field">
+      <label for="destination">Destination</label>
+      <input
+        id="destination"
+        type="text"
+        placeholder="Ex. Aéroport Charles de Gaulle"
+      >
+    </div>
+
+    <button onclick="calculerCourse()">
+      CALCULER MA COURSE
+    </button>
+
+    <div class="error" id="error">
+      Impossible de calculer ce trajet. Vérifiez les adresses.
+    </div>
+
+    <div class="result" id="result">
+
+      <div class="distance">
+        Distance estimée : <strong id="distance">—</strong> km
+      </div>
+
+      <div class="price" id="price">
+        — €
+      </div>
+
+      <div class="note">
+        Tarif : 2,50 €/km · Minimum de course : 25 €
+      </div>
+
+      <a
+        class="reserve"
+        id="reserve"
+        href="#"
+        target="_blank"
+      >
+        RÉSERVER CETTE COURSE
+      </a>
+
+    </div>
+
+  </div>
+
+  <a class="back" href="index.html">
+    ← Retour à D.M. Company
+  </a>
+
+</div>
+</main>
+
+<script>
+
+const TARIF_KM = 2.50;
+const MINIMUM = 25;
+
+async function geocoder(adresse){
+
+  const url =
+    "https://nominatim.openstreetmap.org/search?format=json&limit=1&q="
+    + encodeURIComponent(adresse);
+
+  const response = await fetch(url,{
+    headers:{
+      "Accept":"application/json"
+    }
+  });
+
+  const data = await response.json();
+
+  if(!data.length){
+    throw new Error("Adresse introuvable");
+  }
+
+  return {
+    lat:parseFloat(data[0].lat),
+    lon:parseFloat(data[0].lon)
+  };
+}
+
+async function calculerDistance(depart,destination){
+
+  const url =
+    "https://router.project-osrm.org/route/v1/driving/"
+    + depart.lon + "," + depart.lat
+    + ";"
+    + destination.lon + "," + destination.lat
+    + "?overview=false";
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if(data.code !== "Ok"){
+    throw new Error("Route introuvable");
+  }
+
+  return data.routes[0].distance / 1000;
+}
+
+async function calculerCourse(){
+
+  const departInput =
+    document.getElementById("depart").value.trim();
+
+  const destinationInput =
+    document.getElementById("destination").value.trim();
+
+  const error =
+    document.getElementById("error");
+
+  const result =
+    document.getElementById("result");
+
+  error.style.display="none";
+  result.classList.remove("show");
+
+  if(!departInput || !destinationInput){
+
+    error.textContent =
+      "Veuillez indiquer le départ et la destination.";
+
+    error.style.display="block";
+    return;
+  }
+
+  const button =
+    document.querySelector("button");
+
+  button.disabled=true;
+  button.textContent="CALCUL EN COURS...";
+
+  try{
+
+    const depart =
+      await geocoder(departInput);
+
+    const destination =
+      await geocoder(destinationInput);
+
+    const distance =
+      await calculerDistance(depart,destination);
+
+    const prix =
+      Math.max(MINIMUM,distance*TARIF_KM);
+
+    const distanceArrondie =
+      distance.toFixed(1);
+
+    const prixArrondi =
+      prix.toFixed(2).replace(".",",");
+
+    document.getElementById("distance")
+      .textContent=distanceArrondie;
+
+    document.getElementById("price")
+      .textContent=prixArrondi+" €";
+
+    const message =
+      "Bonjour D.M. Company, je souhaite réserver une course.%0A%0A"
+      + "Départ : " + encodeURIComponent(departInput)
+      + "%0A"
+      + "Destination : " + encodeURIComponent(destinationInput)
+      + "%0A"
+      + "Distance estimée : " + distanceArrondie + " km"
+      + "%0A"
+      + "Prix estimé : " + prixArrondi + " €";
+
+    /*
+      Le numéro WhatsApp sera ajouté dès que vous me donnez
+      le numéro professionnel de D.M. Company.
+    */
+
+    document.getElementById("reserve").href =
+      "https://wa.me/?text=" + message;
+
+    result.classList.add("show");
+
+  }catch(e){
+
+    error.textContent =
+      "Impossible de calculer ce trajet. Vérifiez les adresses.";
+
+    error.style.display="block";
+
+  }finally{
+
+    button.disabled=false;
+    button.textContent="CALCULER MA COURSE";
+
+  }
+}
+
+</script>
+
+</body>
+</html>
