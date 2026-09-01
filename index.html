@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DM Company">
+<meta name="theme-color" content="#0b0b0b">
+
+<title>D.M. Company - Calculateur VTC</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #090909;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px 15px 40px;
+}
+
+.header {
+  text-align: center;
+  padding: 15px 0 20px;
+  border-bottom: 1px solid #333;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 75px;
+  height: 75px;
+  margin: auto;
+  border: 2px solid #c89b3c;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #c89b3c;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+h1 {
+  color: #c89b3c;
+  margin: 10px 0 3px;
+  letter-spacing: 2px;
+  font-size: 25px;
+}
+
+.subtitle {
+  color: #aaa;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.card {
+  background: #171717;
+  border: 1px solid #333;
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+label {
+  display: block;
+  color: #bbb;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  height: 48px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  background: #0b0b0b;
+  color: white;
+  font-size: 17px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #c89b3c;
+}
+
+button {
+  width: 100%;
+  height: 50px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 11px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.calculate {
+  background: #c89b3c;
+  color: #111;
+}
+
+.secondary {
+  background: #292929;
+  color: white;
+  border: 1px solid #444;
+}
+
+.result {
+  margin-top: 18px;
+  padding: 20px;
+  background: #070707;
+  border: 1px solid #3a3a3a;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.result-title {
+  color: #aaa;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.price {
+  color: #c89b3c;
+  font-size: 45px;
+  font-weight: 900;
+  margin: 5px 0 12px;
+}
+
+.details {
+  text-align: left;
+  color: #ccc;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.total {
+  border-top: 1px solid #333;
+  margin-top: 8px;
+  padding-top: 8px;
+  font-weight: bold;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.info {
+  text-align: center;
+  color: #777;
+  font-size: 11px;
+  margin-top: 18px;
+  line-height: 1.5;
+}
+
+@media(max-width:430px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .price {
+    font-size: 40px;
+  }
+}
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  .card {
+    border: none;
+  }
+
+  button,
+  .info {
+    display: none;
+  }
+
+  .price {
+    color: black;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+
+    <div class="logo">
+      DM
+    </div>
+
+    <h1>D.M. COMPANY</h1>
+
+    <div class="subtitle">
+      VTC PARTICULIER · CALCULATEUR
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="grid">
+
+      <div>
+        <label>Distance (km)</label>
+        <input id="km"
+               type="number"
+               inputmode="decimal"
+               step="0.1"
+               value="30">
+      </div>
+
+      <div>
+        <label>Tarif par km (€)</label>
+        <input id="rate"
+               type="number"
+               inputmode="decimal"
+               step="0.01"
+               value="1.80">
+      </div>
+
+      <div>
+        <label>Prise en charge (€)</label>
+        <input id="base"
+               type="number"
+               inputmode="decimal"
+               step="0.01"
+               value="5">
+      </div>
+
+      <div>
+        <label>Péage (€)</label>
+        <input id="toll"
+               type="number"
+               inputmode="decimal"
+               step="0.01"
+               value="0">
+      </div>
+
+      <div>
+        <label>Attente (minutes)</label>
+        <input id="wait"
+               type="number"
+               inputmode="numeric"
+               value="0">
+      </div>
+
+      <div>
+        <label>Attente / heure (€)</label>
+        <input id="waitRate"
+               type="number"
+               inputmode="decimal"
+               step="0.01"
+               value="40">
+      </div>
+
+      <div>
+        <label>Extras (€)</label>
+        <input id="extra"
+               type="number"
+               inputmode="decimal"
+               step="0.01"
+               value="0">
+      </div>
+
+      <div>
+        <label>Remise (€)</label>
+        <input id="discount"
+               type="number"
+               inputmode="decimal"
+               step="0.01"
+               value="0">
+      </div>
+
+    </div>
+
+    <button class="calculate" onclick="calculate()">
+      CALCULER LA COURSE
+    </button>
+
+    <div class="result">
+
+      <div class="result-title">
+        PRIX DE LA COURSE
+      </div>
+
+      <div class="price" id="price">
+        0,00 €
+      </div>
+
+      <div class="details" id="details"></div>
+
+    </div>
+
+    <div class="buttons">
+
+      <button class="secondary" onclick="newCourse()">
+        NOUVELLE COURSE
+      </button>
+
+      <button class="secondary" onclick="window.print()">
+        PDF / IMPRIMER
+      </button>
+
+    </div>
+
+    <div class="info">
+      D.M. COMPANY · VTC PARTICULIER<br>
+      Les tarifs peuvent être modifiés selon votre activité.
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+function value(id) {
+  return parseFloat(document.getElementById(id).value) || 0;
+}
+
+function euros(number) {
+  return number.toLocaleString("fr-FR", {
+    style: "currency",
+    currency: "EUR"
+  });
+}
+
+function calculate() {
+
+  const km = value("km");
+  const rate = value("rate");
+  const base = value("base");
+  const toll = value("toll");
+  const wait = value("wait");
+  const waitRate = value("waitRate");
+  const extra = value("extra");
+  const discount = value("discount");
+
+  const distancePrice = km * rate;
+
+  const waitingPrice =
+    (wait / 60) * waitRate;
+
+  const total =
+    Math.max(
+      0,
+      base +
+      distancePrice +
+      toll +
+      waitingPrice +
+      extra -
+      discount
+    );
+
+  document.getElementById("price").innerText =
+    euros(total);
+
+  document.getElementById("details").innerHTML =
+
+    "Prise en charge : " +
+    euros(base) +
+
+    "<br>Distance : " +
+    km.toFixed(1) +
+    " km × " +
+    euros(rate) +
+    " = " +
+    euros(distancePrice) +
+
+    "<br>Attente : " +
+    wait +
+    " min = " +
+    euros(waitingPrice) +
+
+    "<br>Péage : " +
+    euros(toll) +
+
+    "<br>Extras : " +
+    euros(extra) +
+
+    "<br>Remise : −" +
+    euros(discount) +
+
+    '<div class="total">TOTAL : ' +
+    euros(total) +
+    "</div>";
+
+  localStorage.setItem(
+    "dm_company_rates",
+    JSON.stringify({
+      rate: rate,
+      base: base,
+      waitRate: waitRate
+    })
+  );
+}
+
+function newCourse() {
+
+  document.getElementById("km").value = "";
+
+  document.getElementById("toll").value = "0";
+
+  document.getElementById("wait").value = "0";
+
+  document.getElementById("extra").value = "0";
+
+  document.getElementById("discount").value = "0";
+
+  calculate();
+
+  document.getElementById("km").focus();
+}
+
+function loadRates() {
+
+  const saved =
+    JSON.parse(
+      localStorage.getItem("dm_company_rates")
+      || "null"
+    );
+
+  if (saved) {
+
+    document.getElementById("rate").value =
+      saved.rate;
+
+    document.getElementById("base").value =
+      saved.base;
+
+    document.getElementById("waitRate").value =
+      saved.waitRate;
+  }
+}
+
+loadRates();
+calculate();
+
+</script>
+
+</body>
+</html>
