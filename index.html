@@ -1,368 +1,880 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="D.M. Company">
-<meta name="theme-color" content="#090909">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>D.M. Company - Calculateur VTC</title>
+  <title>D.M. Company — Calculateur VTC</title>
 
-<style>
-* {
-  box-sizing: border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  background: #090909;
-  color: white;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, #242424 0%, #0b0b0b 45%, #000 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
 
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px 15px 40px;
-}
+    .page {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 28px 18px 45px;
+    }
 
-.header {
-  text-align: center;
-  padding: 15px 0 22px;
-  border-bottom: 1px solid #333;
-  margin-bottom: 20px;
-}
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
 
-.logo {
-  width: 78px;
-  height: 78px;
-  margin: auto;
-  border: 2px solid #c89b3c;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #c89b3c;
-  font-size: 28px;
-  font-weight: bold;
-}
+    .brand {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      color: #d4af37;
+    }
 
-h1 {
-  color: #c89b3c;
-  margin: 10px 0 4px;
-  letter-spacing: 2px;
-  font-size: 25px;
-}
+    .subtitle {
+      margin-top: 6px;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #ddd;
+    }
 
-.subtitle {
-  color: #aaa;
-  font-size: 11px;
-  letter-spacing: 2px;
-}
+    .card {
+      background: rgba(20, 20, 20, 0.96);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.45);
+    }
 
-.card {
-  background: #171717;
-  border: 1px solid #333;
-  border-radius: 20px;
-  padding: 18px;
-}
+    .field {
+      margin-bottom: 18px;
+    }
 
-.field {
-  margin-bottom: 15px;
-}
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #d4af37;
+      letter-spacing: 0.4px;
+    }
 
-label {
-  display: block;
-  color: #bbb;
-  font-size: 13px;
-  margin-bottom: 7px;
-}
+    input,
+    select {
+      width: 100%;
+      height: 52px;
+      border-radius: 12px;
+      border: 1px solid #555;
+      background: #101010;
+      color: #fff;
+      padding: 0 14px;
+      font-size: 16px;
+      outline: none;
+    }
 
-input,
-select {
-  width: 100%;
-  height: 50px;
-  padding: 0 13px;
-  border-radius: 11px;
-  border: 1px solid #444;
-  background: #0b0b0b;
-  color: white;
-  font-size: 16px;
-}
+    input:focus,
+    select:focus {
+      border-color: #d4af37;
+      box-shadow: 0 0 0 2px rgba(212,175,55,0.12);
+    }
 
-input:focus,
-select:focus {
-  outline: none;
-  border-color: #c89b3c;
-}
+    /* Google autocomplete */
+    .autocomplete-box {
+      width: 100%;
+      min-height: 52px;
+      background: #101010;
+      border-radius: 12px;
+    }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
+    place-autocomplete-element {
+      display: block;
+      width: 100%;
+    }
 
-button {
-  width: 100%;
-  min-height: 52px;
-  margin-top: 8px;
-  border: none;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .calculate {
+      width: 100%;
+      height: 56px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #d4af37, #b68d22);
+      color: #000;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
 
-.calculate {
-  background: #c89b3c;
-  color: #111;
-  margin-top: 5px;
-}
+    .calculate:active {
+      transform: scale(0.99);
+    }
 
-.reserve {
-  background: #292929;
-  color: white;
-  border: 1px solid #555;
-}
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 18px;
+      color: #d4af37;
+      font-size: 14px;
+    }
 
-.result {
-  display: none;
-  margin-top: 18px;
-  padding: 22px 18px;
-  background: #070707;
-  border: 1px solid #3a3a3a;
-  border-radius: 16px;
-  text-align: center;
-}
+    .error {
+      display: none;
+      margin-top: 16px;
+      padding: 13px;
+      border-radius: 10px;
+      background: #321313;
+      border: 1px solid #8f3a3a;
+      color: #ffd6d6;
+      font-size: 14px;
+      line-height: 1.4;
+    }
 
-.result-title {
-  color: #aaa;
-  font-size: 11px;
-  letter-spacing: 2px;
-}
+    .result {
+      display: none;
+      margin-top: 24px;
+      border-top: 1px solid rgba(212,175,55,0.35);
+      padding-top: 22px;
+    }
 
-.price {
-  color: #c89b3c;
-  font-size: 44px;
-  font-weight: 900;
-  margin: 6px 0 10px;
-}
+    .result-title {
+      text-align: center;
+      color: #d4af37;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+    }
 
-.result-message {
-  color: #aaa;
-  font-size: 12px;
-  line-height: 1.5;
-}
+    .summary {
+      background: #0c0c0c;
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid #292929;
+    }
 
-.info {
-  text-align: center;
-  color: #777;
-  font-size: 11px;
-  margin-top: 18px;
-  line-height: 1.5;
-}
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid #222;
+      font-size: 14px;
+    }
 
-@media(max-width:430px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+    .summary-row:last-child {
+      border-bottom: none;
+    }
 
-  .price {
-    font-size: 40px;
-  }
-}
-</style>
+    .summary-label {
+      color: #aaa;
+      flex: 0 0 105px;
+    }
+
+    .summary-value {
+      color: #fff;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .price-box {
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid rgba(212,175,55,0.45);
+      border-radius: 15px;
+      background: linear-gradient(
+        145deg,
+        rgba(212,175,55,0.10),
+        rgba(0,0,0,0.2)
+      );
+    }
+
+    .price-label {
+      font-size: 12px;
+      color: #bbb;
+      letter-spacing: 2px;
+    }
+
+    .price {
+      margin-top: 8px;
+      font-size: 38px;
+      font-weight: 900;
+      color: #d4af37;
+    }
+
+    .rate {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .reserve {
+      width: 100%;
+      height: 52px;
+      margin-top: 18px;
+      border-radius: 13px;
+      border: 1px solid #d4af37;
+      background: transparent;
+      color: #d4af37;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+    }
+
+    .reserve:hover {
+      background: #d4af37;
+      color: #000;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 11px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 400px) {
+      .page {
+        padding: 22px 13px 35px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .brand {
+        font-size: 26px;
+      }
+
+      .price {
+        font-size: 34px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
+  <div class="page">
 
-  <div class="header">
-    <div class="logo">DM</div>
-
-    <h1>D.M. COMPANY</h1>
-
-    <div class="subtitle">
-      VTC PREMIUM
-    </div>
-  </div>
-
-  <div class="card">
-
-    <div class="field">
-      <label>📍 Départ</label>
-      <input
-        id="departure"
-        type="text"
-        placeholder="Adresse de départ">
+    <div class="header">
+      <div class="brand">D.M. COMPANY</div>
+      <div class="subtitle">VTC PREMIUM</div>
     </div>
 
-    <div class="field">
-      <label>📍 Destination</label>
-      <input
-        id="destination"
-        type="text"
-        placeholder="Adresse de destination">
-    </div>
-
-    <div class="grid">
+    <div class="card">
 
       <div class="field">
-        <label>📅 Date</label>
-        <input id="date" type="date">
+        <label>📍 DÉPART</label>
+        <div class="autocomplete-box" id="departureBox"></div>
       </div>
 
       <div class="field">
-        <label>🕐 Heure</label>
-        <input id="time" type="time">
+        <label>📍 DESTINATION</label>
+        <div class="autocomplete-box" id="destinationBox"></div>
       </div>
 
-    </div>
-
-    <div class="field">
-      <label>👤 Nombre de passagers</label>
-
-      <select id="passengers">
-        <option value="1">1 passager</option>
-        <option value="2">2 passagers</option>
-        <option value="3">3 passagers</option>
-        <option value="4">4 passagers</option>
-        <option value="5">5 passagers</option>
-        <option value="6">6 passagers</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>🚗 Distance estimée (km)</label>
-
-      <input
-        id="km"
-        type="number"
-        inputmode="decimal"
-        min="0"
-        step="0.1"
-        placeholder="Ex. 30">
-    </div>
-
-    <button
-      class="calculate"
-      onclick="calculatePrice()">
-      CALCULER LE PRIX
-    </button>
-
-    <div
-      class="result"
-      id="result">
-
-      <div class="result-title">
-        PRIX ESTIMATIF
+      <div class="field">
+        <label>📅 DATE</label>
+        <input type="date" id="date">
       </div>
 
-      <div
-        class="price"
-        id="price">
-        0,00 €
+      <div class="field">
+        <label>🕐 HEURE</label>
+        <input type="time" id="time">
       </div>
 
-      <div class="result-message">
-        Estimation basée sur la distance indiquée.<br>
-        Tarif D.M. Company : 2,50 € / km
+      <div class="field">
+        <label>👤 NOMBRE DE PASSAGERS</label>
+        <select id="passengers">
+          <option value="1">1 passager</option>
+          <option value="2">2 passagers</option>
+          <option value="3">3 passagers</option>
+          <option value="4">4 passagers</option>
+          <option value="5">5 passagers</option>
+          <option value="6">6 passagers</option>
+          <option value="7">7 passagers</option>
+        </select>
       </div>
 
-      <button
-        class="reserve"
-        onclick="reserve()">
-        RÉSERVER MAINTENANT
+      <button class="calculate" id="calculateBtn">
+        CALCULER LE PRIX
       </button>
 
+      <div class="loading" id="loading">
+        Calcul de votre trajet...
+      </div>
+
+      <div class="error" id="error"></div>
+
+      <div class="result" id="result">
+
+        <div class="result-title">
+          RÉSUMÉ DE VOTRE COURSE
+        </div>
+
+        <div class="summary">
+
+          <div class="summary-row">
+            <div class="summary-label">Départ</div>
+            <div class="summary-value" id="summaryDeparture">—</div>
+          </div>
+
+          <div class="summary-row">
+            <div class="summary-label">Destination</div>
+            <div class="summary-value" id="summaryDestination">—</div>
+          </div>
+
+          <div class="summary-row">
+            <div class="summary-label">Date</div>
+            <div class="summary-value" id="summaryDate">—</div>
+          </div>
+
+          <div class="summary-row">
+            <div class="summary-label">Heure</div>
+            <div class="summary-value" id="summaryTime">—</div>
+          </div>
+
+          <div class="summary-row">
+            <div class="summary-label">Passagers</div>
+            <div class="summary-value" id="summaryPassengers">—</div>
+          </div>
+
+          <div class="summary-row">
+            <div class="summary-label">Distance</div>
+            <div class="summary-value" id="summaryDistance">—</div>
+          </div>
+
+        </div>
+
+        <div class="price-box">
+          <div class="price-label">
+            PRIX ESTIMATIF
+          </div>
+
+          <div class="price" id="price">
+            0,00 €
+          </div>
+
+          <div class="rate">
+            Tarif D.M. Company : 2,50 € / km
+          </div>
+        </div>
+
+        <button class="reserve" id="reserveBtn">
+          RÉSERVER MAINTENANT
+        </button>
+
+      </div>
+
     </div>
 
-    <div class="info">
-      D.M. COMPANY · VTC PREMIUM<br>
-      Le prix affiché est une estimation.
+    <div class="footer">
+      D.M. Company — VTC Premium<br>
+      Prix estimatif basé sur la distance routière.
     </div>
 
   </div>
 
-</div>
 
-<script>
+  <script>
 
-const TARIF_KM = 2.50;
+    /* =====================================================
+       D.M. COMPANY
+       TARIF
+    ===================================================== */
 
-function euros(number) {
-  return number.toLocaleString("fr-FR", {
-    style: "currency",
-    currency: "EUR"
-  });
-}
+    const TARIF_KM = 2.50;
 
-function calculatePrice() {
+    let departurePlace = null;
+    let destinationPlace = null;
 
-  const km = parseFloat(
-    document.getElementById("km").value
-  ) || 0;
 
-  if (km <= 0) {
-    alert("Veuillez indiquer la distance en kilomètres.");
-    return;
-  }
+    /* =====================================================
+       INITIALISATION GOOGLE MAPS
+    ===================================================== */
 
-  const total = km * TARIF_KM;
+    window.initMaps = async function () {
 
-  document.getElementById("price").innerText =
-    euros(total);
+      try {
 
-  document.getElementById("result").style.display =
-    "block";
+        const { PlaceAutocompleteElement } =
+          await google.maps.importLibrary("places");
 
-  document.getElementById("result").scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-}
+        /* -----------------------------
+           DÉPART
+        ----------------------------- */
 
-function reserve() {
+        const departureAutocomplete =
+          new PlaceAutocompleteElement();
 
-  const departure =
-    document.getElementById("departure").value;
+        departureAutocomplete.placeholder =
+          "Adresse de départ";
 
-  const destination =
-    document.getElementById("destination").value;
+        departureAutocomplete.includedRegionCodes = ["fr"];
 
-  const date =
-    document.getElementById("date").value;
+        document
+          .getElementById("departureBox")
+          .appendChild(departureAutocomplete);
 
-  const time =
-    document.getElementById("time").value;
 
-  const passengers =
-    document.getElementById("passengers").value;
+        /* -----------------------------
+           DESTINATION
+        ----------------------------- */
 
-  const km =
-    document.getElementById("km").value;
+        const destinationAutocomplete =
+          new PlaceAutocompleteElement();
 
-  if (!departure || !destination || !date || !time || !km) {
-    alert(
-      "Veuillez remplir le départ, la destination, la date, l'heure et la distance."
-    );
-    return;
-  }
+        destinationAutocomplete.placeholder =
+          "Adresse de destination";
 
-  alert(
-    "Votre demande est prête à être finalisée.\n\n" +
-    "Départ : " + departure + "\n" +
-    "Destination : " + destination + "\n" +
-    "Date : " + date + "\n" +
-    "Heure : " + time + "\n" +
-    "Passagers : " + passengers + "\n" +
-    "Distance : " + km + " km"
-  );
-}
+        destinationAutocomplete.includedRegionCodes = ["fr"];
 
-</script>
+        document
+          .getElementById("destinationBox")
+          .appendChild(destinationAutocomplete);
+
+
+        /* -----------------------------
+           SÉLECTION DÉPART
+        ----------------------------- */
+
+        departureAutocomplete.addEventListener(
+          "gmp-select",
+          async ({ placePrediction }) => {
+
+            try {
+
+              const place =
+                placePrediction.toPlace();
+
+              await place.fetchFields({
+                fields: [
+                  "displayName",
+                  "formattedAddress",
+                  "location"
+                ]
+              });
+
+              departurePlace = place;
+
+            } catch (error) {
+
+              console.error(
+                "Erreur départ :",
+                error
+              );
+
+            }
+
+          }
+        );
+
+
+        /* -----------------------------
+           SÉLECTION DESTINATION
+        ----------------------------- */
+
+        destinationAutocomplete.addEventListener(
+          "gmp-select",
+          async ({ placePrediction }) => {
+
+            try {
+
+              const place =
+                placePrediction.toPlace();
+
+              await place.fetchFields({
+                fields: [
+                  "displayName",
+                  "formattedAddress",
+                  "location"
+                ]
+              });
+
+              destinationPlace = place;
+
+            } catch (error) {
+
+              console.error(
+                "Erreur destination :",
+                error
+              );
+
+            }
+
+          }
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Google Maps n'a pas pu se charger :",
+          error
+        );
+
+        showError(
+          "Impossible de charger la recherche d'adresses Google. Vérifiez la configuration Google Maps."
+        );
+
+      }
+
+    };
+
+
+    /* =====================================================
+       CALCUL
+    ===================================================== */
+
+    document
+      .getElementById("calculateBtn")
+      .addEventListener(
+        "click",
+        calculatePrice
+      );
+
+
+    async function calculatePrice() {
+
+      hideError();
+
+      const date =
+        document.getElementById("date").value;
+
+      const time =
+        document.getElementById("time").value;
+
+      const passengers =
+        document.getElementById("passengers").value;
+
+
+      /* Vérifications */
+
+      if (!departurePlace) {
+
+        showError(
+          "Veuillez sélectionner une adresse de départ dans les suggestions Google."
+        );
+
+        return;
+      }
+
+
+      if (!destinationPlace) {
+
+        showError(
+          "Veuillez sélectionner une adresse de destination dans les suggestions Google."
+        );
+
+        return;
+      }
+
+
+      if (!date) {
+
+        showError(
+          "Veuillez choisir une date."
+        );
+
+        return;
+      }
+
+
+      if (!time) {
+
+        showError(
+          "Veuillez choisir une heure."
+        );
+
+        return;
+      }
+
+
+      /* Afficher chargement */
+
+      const loading =
+        document.getElementById("loading");
+
+      loading.style.display = "block";
+
+
+      try {
+
+        const { Route } =
+          await google.maps.importLibrary("routes");
+
+
+        /* ---------------------------------
+           CALCUL ROUTE
+        --------------------------------- */
+
+        const request = {
+
+          origin: departurePlace,
+
+          destination: destinationPlace,
+
+          travelMode: "DRIVING",
+
+          language: "fr",
+
+          units: google.maps.UnitSystem.METRIC,
+
+          fields: [
+            "distanceMeters"
+          ]
+
+        };
+
+
+        const result =
+          await Route.computeRoutes(request);
+
+
+        if (
+          !result.routes ||
+          result.routes.length === 0
+        ) {
+
+          throw new Error(
+            "Aucun itinéraire trouvé."
+          );
+
+        }
+
+
+        const route =
+          result.routes[0];
+
+
+        const distanceMeters =
+          route.distanceMeters;
+
+
+        if (
+          typeof distanceMeters !== "number" ||
+          distanceMeters <= 0
+        ) {
+
+          throw new Error(
+            "Distance impossible à déterminer."
+          );
+
+        }
+
+
+        /* ---------------------------------
+           DISTANCE
+        --------------------------------- */
+
+        const distanceKm =
+          distanceMeters / 1000;
+
+
+        /* ---------------------------------
+           PRIX
+        --------------------------------- */
+
+        const total =
+          distanceKm * TARIF_KM;
+
+
+        /* ---------------------------------
+           AFFICHER RÉSUMÉ
+        --------------------------------- */
+
+        document.getElementById(
+          "summaryDeparture"
+        ).textContent =
+          departurePlace.formattedAddress ||
+          departurePlace.displayName ||
+          "—";
+
+
+        document.getElementById(
+          "summaryDestination"
+        ).textContent =
+          destinationPlace.formattedAddress ||
+          destinationPlace.displayName ||
+          "—";
+
+
+        document.getElementById(
+          "summaryDate"
+        ).textContent =
+          formatDate(date);
+
+
+        document.getElementById(
+          "summaryTime"
+        ).textContent =
+          time;
+
+
+        document.getElementById(
+          "summaryPassengers"
+        ).textContent =
+          passengers +
+          (
+            passengers === "1"
+              ? " passager"
+              : " passagers"
+          );
+
+
+        document.getElementById(
+          "summaryDistance"
+        ).textContent =
+          distanceKm.toFixed(1)
+            .replace(".", ",") +
+          " km";
+
+
+        document.getElementById(
+          "price"
+        ).textContent =
+          formatEuro(total);
+
+
+        document.getElementById(
+          "result"
+        ).style.display = "block";
+
+
+        /* Aller au résultat */
+
+        document.getElementById(
+          "result"
+        ).scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+
+      } catch (error) {
+
+        console.error(
+          "Erreur calcul itinéraire :",
+          error
+        );
+
+        showError(
+          "Impossible de calculer cet itinéraire. Vérifiez les deux adresses puis réessayez."
+        );
+
+      } finally {
+
+        loading.style.display = "none";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       DATE
+    ===================================================== */
+
+    function formatDate(dateString) {
+
+      const parts =
+        dateString.split("-");
+
+      if (parts.length !== 3) {
+        return dateString;
+      }
+
+      return (
+        parts[2] +
+        "/" +
+        parts[1] +
+        "/" +
+        parts[0]
+      );
+
+    }
+
+
+    /* =====================================================
+       EURO
+    ===================================================== */
+
+    function formatEuro(value) {
+
+      return value
+        .toFixed(2)
+        .replace(".", ",") +
+        " €";
+
+    }
+
+
+    /* =====================================================
+       ERREUR
+    ===================================================== */
+
+    function showError(message) {
+
+      const error =
+        document.getElementById("error");
+
+      error.textContent = message;
+
+      error.style.display = "block";
+
+    }
+
+
+    function hideError() {
+
+      document.getElementById(
+        "error"
+      ).style.display = "none";
+
+    }
+
+
+    /* =====================================================
+       RÉSERVER
+    ===================================================== */
+
+    document
+      .getElementById("reserveBtn")
+      .addEventListener(
+        "click",
+        function () {
+
+          alert(
+            "Votre demande de réservation est prête.\n\n" +
+            "D.M. Company vous contactera pour confirmer la course."
+          );
+
+        }
+      );
+
+  </script>
+
+
+  <!-- =====================================================
+       GOOGLE MAPS JAVASCRIPT API
+  
+  ====================================================== -->
+
+  <script
+    async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE&loading=async&callback=initMaps">
+  </script>
 
 </body>
 </html>
