@@ -818,7 +818,134 @@ footer h4{
   </div>
 </section>
 
-<section id="aeroports">
+<section class="paris-gallery">
+  <div class="gallery-title">
+    <div class="kicker">PARIS À VOTRE RYTHME</div>
+    <h2>Découvrez Paris dans le confort et l'élégance.</h2>
+  </div>
+
+  <div class="gallery-grid">
+
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=900&q=85" alt="Tour Eiffel">
+      <div class="gallery-caption">Tour Eiffel</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1564399579883-451a5d44ec08?auto=format&fit=crop&w=900&q=85" alt="Arc de Triomphe">
+      <div class="gallery-caption">Arc de Triomphe</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=900&q=85" alt="Le Louvre">
+      <div class="gallery-caption">Le Louvre</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1508057198894-247b23fe5ade?auto=format&fit=crop&w=900&q=85" alt="La Seine">
+      <div class="gallery-caption">La Seine</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1503917988258-f87a78e3c995?auto=format&fit=crop&w=900&q=85" alt="Montmartre">
+      <div class="gallery-caption">Montmartre</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=900&q=85" alt="Champs-Élysées">
+      <div class="gallery-caption">Champs-Élysées</div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.paris-gallery {
+  padding: 80px 5%;
+  background: #080808;
+  text-align: center;
+}
+
+.paris-gallery .kicker {
+  color: #d4af37;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.paris-gallery h2 {
+  color: #fff;
+  font-size: 32px;
+  margin: 15px 0 45px;
+}
+
+.gallery-grid {
+  max-width: 1250px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.gallery-item {
+  position: relative;
+  height: 330px;
+  overflow: hidden;
+  border: 1px solid rgba(212,175,55,.25);
+  border-radius: 6px;
+  background: #111;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .5s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.08);
+}
+
+.gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 22px 8px 16px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  background: linear-gradient(transparent, rgba(0,0,0,.95));
+}
+
+@media (max-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .paris-gallery {
+    padding: 60px 20px;
+  }
+
+  .paris-gallery h2 {
+    font-size: 24px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery-item {
+    height: 260px;
+  }
+}
+</style>
+  
+  <section id="aeroports">
   <div class="container">
 
     <div class="section-title">
