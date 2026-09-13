@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b0b">
+  <title>DM Company Chauffeur</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #080808;
+      color: white;
+    }
+
+    .gold {
+      color: #d4af37;
+    }
+
+    .login,
+    .app {
+      min-height: 100vh;
+    }
+
+    .login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      background:
+        radial-gradient(circle at top, #25200d 0%, #080808 45%);
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      background: #111;
+      border: 1px solid #3b3218;
+      border-radius: 22px;
+      padding: 35px 25px;
+      text-align: center;
+      box-shadow: 0 15px 50px rgba(0,0,0,.5);
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      color: #d4af37;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      margin-bottom: 30px;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px;
+      margin: 8px 0;
+      border-radius: 12px;
+      border: 1px solid #444;
+      background: #1b1b1b;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #d4af37;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 12px;
+      border: 0;
+      border-radius: 12px;
+      background: #d4af37;
+      color: #080808;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+
+    .error {
+      color: #ff6b6b;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    header {
+      background: #101010;
+      border-bottom: 1px solid #302815;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header strong {
+      color: #d4af37;
+      letter-spacing: 2px;
+    }
+
+    .logout {
+      width: auto;
+      margin: 0;
+      padding: 9px 14px;
+      background: transparent;
+      border: 1px solid #d4af37;
+      color: #d4af37;
+      font-size: 13px;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+      margin-bottom: 5px;
+      font-size: 27px;
+    }
+
+    .welcome p {
+      color: #999;
+      margin-top: 0;
+    }
+
+    .reservation {
+      background: #111;
+      border: 1px solid #302815;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .reservation.new {
+      border-color: #d4af37;
+      box-shadow: 0 0 20px rgba(212,175,55,.08);
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .client {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .status {
+      background: #d4af37;
+      color: #080808;
+      border-radius: 20px;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      height: fit-content;
+    }
+
+    .info {
+      display: grid;
+      gap: 11px;
+      color: #ddd;
+      font-size: 15px;
+    }
+
+    .info span {
+      color: #999;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .accept {
+      background: #d4af37;
+    }
+
+    .refuse {
+      background: #252525;
+      color: #ff7777;
+      border: 1px solid #553333;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #777;
+      background: #111;
+      border-radius: 18px;
+      border: 1px solid #222;
+    }
+
+    @media(max-width:600px) {
+      main {
+        padding: 14px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <section id="loginScreen" class="login">
+    <div class="login-box">
+      <div class="logo">D.M. COMPANY</div>
+      <div class="subtitle">ESPACE CHAUFFEUR PREMIUM</div>
+
+      <input id="email" type="email" placeholder="E-mail">
+      <input id="password" type="password" placeholder="Mot de passe">
+
+      <button id="loginBtn">SE CONNECTER</button>
+
+      <div id="loginError" class="error"></div>
+    </div>
+  </section>
+
+
+  <!-- APPLICATION -->
+  <section id="appScreen" class="app hidden">
+
+    <header>
+      <strong>DM COMPANY</strong>
+      <button class="logout" id="logoutBtn">Déconnexion</button>
+    </header>
+
+    <main>
+
+      <div class="welcome">
+        <h1>Bonjour 👋</h1>
+        <p>Voici vos demandes de réservation.</p>
+      </div>
+
+      <div id="reservationsList">
+        <div class="empty">
+          Chargement des réservations...
+        </div>
+      </div>
+
+    </main>
+  </section>
+
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+    import {
+      getFirestore,
+      collection,
+      query,
+      orderBy,
+      onSnapshot,
+      doc,
+      updateDoc
+    } from
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    /* =====================================================
+       CONFIGURATION FIREBASE
+       ===================================================== */
+
+    const firebaseConfig = {
+
+      apiKey: "COLLER_ICI_VOTRE_API_KEY",
+
+      authDomain: "dm-company-efc01.firebaseapp.com",
+
+      projectId: "dm-company-efc01",
+
+      storageBucket: "dm-company-efc01.firebasestorage.app",
+
+      messagingSenderId: "COLLER_ICI",
+
+      appId: "COLLER_ICI"
+
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+
+    /* =====================================================
+       ELEMENTOS
+       ===================================================== */
+
+    const loginScreen =
+      document.getElementById("loginScreen");
+
+    const appScreen =
+      document.getElementById("appScreen");
+
+    const email =
+      document.getElementById("email");
+
+    const password =
+      document.getElementById("password");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const loginError =
+      document.getElementById("loginError");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+    const reservationsList =
+      document.getElementById("reservationsList");
+
+
+    /* =====================================================
+       LOGIN
+       ===================================================== */
+
+    loginBtn.addEventListener("click", async () => {
+
+      loginError.textContent = "";
+
+      if (!email.value || !password.value) {
+        loginError.textContent =
+          "Veuillez remplir tous les champs.";
+        return;
+      }
+
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email.value,
+          password.value
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        loginError.textContent =
+          "E-mail ou mot de passe incorrect.";
+
+      }
+
+    });
+
+
+    /* =====================================================
+       DECONNEXION
+       ===================================================== */
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+
+    /* =====================================================
+       ETAT DE CONNEXION
+       ===================================================== */
+
+    onAuthStateChanged(auth, (user) => {
+
+      if (user) {
+
+        loginScreen.classList.add("hidden");
+
+        appScreen.classList.remove("hidden");
+
+        loadReservations();
+
+      } else {
+
+        loginScreen.classList.remove("hidden");
+
+        appScreen.classList.add("hidden");
+
+      }
+
+    });
+
+
+    /* =====================================================
+       RESERVATIONS
+       ===================================================== */
+
+    function loadReservations() {
+
+      const reservationsRef =
+        collection(db, "reservations");
+
+      const reservationsQuery =
+        query(
+          reservationsRef,
+          orderBy("date")
+        );
+
+
+      onSnapshot(
+        reservationsQuery,
+        (snapshot) => {
+
+          reservationsList.innerHTML = "";
+
+          if (snapshot.empty) {
+
+            reservationsList.innerHTML = `
+              <div class="empty">
+                <div style="font-size:45px;">🚘</div>
+                <br>
+                Aucune réservation pour le moment.
+              </div>
+            `;
+
+            return;
+          }
+
+
+          snapshot.forEach((item) => {
+
+            const data = item.data();
+
+            const card =
+              document.createElement("div");
+
+            card.className =
+              "reservation" +
+              (data.status === "pending"
+                ? " new"
+                : "");
+
+
+            card.innerHTML = `
+
+              <div class="top">
+
+                <div class="client">
+                  ${data.customerName || "Client"}
+                </div>
+
+                <div class="status">
+                  ${data.status || "pending"}
+                </div>
+
+              </div>
+
+
+              <div class="info">
+
+                <div>
+                  📅 <span>Date :</span>
+                  ${data.date || "-"}
+                </div>
+
+                <div>
+                  🕐 <span>Heure :</span>
+                  ${data.time || "-"}
+                </div>
+
+                <div>
+                  📍 <span>Départ :</span>
+                  ${data.pickup || "-"}
+                </div>
+
+                <div>
+                  🏁 <span>Destination :</span>
+                  ${data.destination || "-"}
+                </div>
+
+                <div>
+                  👥 <span>Passagers :</span>
+                  ${data.passengers || "1"}
+                </div>
+
+                <div>
+                  📞 <span>Téléphone :</span>
+                  ${data.customerPhone || "-"}
+                </div>
+
+                <div>
+                  ✈️ <span>Vol :</span>
+                  ${data.flightNumber || "-"}
+                </div>
+
+                <div>
+                  📝 <span>Notes :</span>
+                  ${data.notes || "-"}
+                </div>
+
+              </div>
+
+
+              ${
+                data.status === "pending"
+                ? `
+
+                <div class="actions">
+
+                  <button
+                    class="accept"
+                    onclick="acceptReservation('${item.id}')">
+
+                    ✓ ACCEPTER
+
+                  </button>
+
+                  <button
+                    class="refuse"
+                    onclick="refuseReservation('${item.id}')">
+
+                    ✕ REFUSER
+
+                  </button>
+
+                </div>
+
+                `
+                : ""
+              }
+
+            `;
+
+
+            reservationsList.appendChild(card);
+
+          });
+
+        },
+
+        (error) => {
+
+          console.error(error);
+
+          reservationsList.innerHTML = `
+            <div class="empty">
+              Impossible de charger les réservations.
+            </div>
+          `;
+
+        }
+
+      );
+
+    }
+
+
+    /* =====================================================
+       ACCEPTER
+       ===================================================== */
+
+    window.acceptReservation =
+      async function(id) {
+
+        try {
+
+          await updateDoc(
+            doc(db, "reservations", id),
+            {
+              status: "accepted"
+            }
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "Impossible d'accepter la réservation."
+          );
+
+        }
+
+      };
+
+
+    /* =====================================================
+       REFUSER
+       ===================================================== */
+
+    window.refuseReservation =
+      async function(id) {
+
+        if (
+          !confirm(
+            "Voulez-vous vraiment refuser cette réservation ?"
+          )
+        ) {
+          return;
+        }
+
+        try {
+
+          await updateDoc(
+            doc(db, "reservations", id),
+            {
+              status: "refused"
+            }
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "Impossible de refuser la réservation."
+          );
+
+        }
+
+      };
+
+  </script>
+
+</body>
+</html>
