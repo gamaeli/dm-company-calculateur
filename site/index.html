@@ -1157,36 +1157,91 @@ footer h4{
   </div>
 </footer>
 
-<script>
-document.getElementById("bookingForm").addEventListener("submit", function(e){
-  e.preventDefault();
+<script type="module">
 
-  const nom = document.getElementById("nom").value;
-  const telephone = document.getElementById("telephone").value;
-  const date = document.getElementById("date").value;
-  const heure = document.getElementById("heure").value;
-  const depart = document.getElementById("depart").value;
-  const destination = document.getElementById("destination").value;
-  const message = document.getElementById("message").value;
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-  const texte =
-`DEMANDE DE RÉSERVATION — D.M. COMPANY
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-Nom : ${nom}
-Téléphone : ${telephone}
-Date : ${date}
-Heure : ${heure}
-Départ : ${depart}
-Destination : ${destination}
-Message : ${message}`;
 
-  navigator.clipboard.writeText(texte).then(function(){
-    alert("Votre demande a été préparée et copiée. Nous ajouterons votre WhatsApp professionnel pour l'envoi direct.");
-  }).catch(function(){
-    alert(texte);
-  });
-});
+const firebaseConfig = {
+  apiKey: "AIzaSyCYcpKVa67-b1whsW3XFFvtTsto472Q_oc",
+  authDomain: "dm-company-efc01.firebaseapp.com",
+  projectId: "dm-company-efc01",
+  storageBucket: "dm-company-efc01.firebasestorage.app",
+  messagingSenderId: "374303883452",
+  appId: "1:374303883452:web:01d04dae50f2464e6e10b9"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+document.getElementById("bookingForm").addEventListener(
+  "submit",
+  async function(e) {
+
+    e.preventDefault();
+
+    const nom = document.getElementById("nom").value.trim();
+    const telephone = document.getElementById("telephone").value.trim();
+    const date = document.getElementById("date").value;
+    const heure = document.getElementById("heure").value;
+    const depart = document.getElementById("depart").value.trim();
+    const destination = document.getElementById("destination").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    try {
+
+      await addDoc(collection(db, "reservations"), {
+
+        customerName: nom,
+        customerPhone: telephone,
+
+        date: date,
+        time: heure,
+
+        pickup: depart,
+        destination: destination,
+
+        passengers: "1",
+        flightNumber: "",
+
+        notes: message,
+
+        status: "pending",
+
+        createdAt: serverTimestamp()
+
+      });
+
+
+      alert(
+        "Votre demande de réservation a bien été envoyée. D.M. Company vous contactera prochainement."
+      );
+
+      document.getElementById("bookingForm").reset();
+
+
+    } catch (error) {
+
+      console.error("Erreur Firebase :", error);
+
+      alert(
+        "Impossible d'envoyer la réservation pour le moment. Veuillez réessayer."
+      );
+
+    }
+
+  }
+);
+
 </script>
-
 </body>
 </html>
