@@ -1066,6 +1066,16 @@ footer h4{
           <label>Destination</label>
           <input type="text" id="destination" required placeholder="Adresse d'arrivée">
         </div>
+        <div class="field full">
+  <label>Nombre de passagers</label>
+  <select id="passengers" required>
+    <option value="">Choisissez le nombre</option>
+    <option value="1">1 passager</option>
+    <option value="2">2 passagers</option>
+    <option value="3">3 passagers</option>
+    <option value="4">4 passagers</option>
+  </select>
+</div>
 
         <div class="field full">
           <label>Message</label>
@@ -1195,6 +1205,7 @@ document.getElementById("bookingForm").addEventListener(
     const heure = document.getElementById("heure").value;
     const depart = document.getElementById("depart").value.trim();
     const destination = document.getElementById("destination").value.trim();
+    const passengers = document.getElementById("passengers").value;
     const message = document.getElementById("message").value.trim();
 
     try {
@@ -1210,7 +1221,7 @@ document.getElementById("bookingForm").addEventListener(
         pickup: depart,
         destination: destination,
 
-        passengers: "1",
+        passengers: passengers,
         flightNumber: "",
 
         notes: message,
