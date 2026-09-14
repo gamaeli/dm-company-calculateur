@@ -302,6 +302,7 @@
       onSnapshot,
       doc,
       updateDoc
+      deleteDoc
     } from
       "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -560,8 +561,14 @@
                     onclick="refuseReservation('${item.id}')">
 
                     ✕ REFUSER
+</button>
 
-                  </button>
+<button
+  class="delete"
+  onclick="deleteReservation('${item.id}')">
+  🗑️ SUPPRIMER
+</button>
+</div>
 
                 </div>
 
@@ -659,7 +666,27 @@
         }
 
       };
+window.deleteReservation = async function(id) {
 
+  if (!confirm("Voulez-vous vraiment supprimer cette réservation ?")) {
+    return;
+  }
+
+  try {
+
+    await deleteDoc(
+      doc(db, "reservations", id)
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Impossible de supprimer la réservation.");
+
+  }
+
+};
   </script>
 
 </body>
