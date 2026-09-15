@@ -36,3 +36,5 @@ jobs:
           fi
           git commit -m "Polir les boutons de l App-Chauffeur"
           git push
+
+# Polissage premium des actions principales, sans modifier les fonctions.
