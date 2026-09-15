@@ -1,0 +1,87 @@
+name: Prepare chauffeur app PWA
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  pwa:
+    if: ${{ !contains(github.event.head_commit.message, 'PWA ready') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add PWA files and registration
+        shell: bash
+        run: |
+          mkdir -p site/app-chauffeur/icons
+          cat > site/app-chauffeur/manifest.webmanifest <<'EOF'
+          {
+            "name": "D.M. COMPANY – CHAUFFEUR PRIVÉ",
+            "short_name": "D.M. COMPANY",
+            "lang": "fr-FR",
+            "start_url": "./",
+            "scope": "./",
+            "display": "standalone",
+            "background_color": "#070707",
+            "theme_color": "#070707",
+            "description": "Application chauffeur privé D.M. COMPANY",
+            "icons": [
+              {"src":"./icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+            ]
+          }
+          EOF
+
+          cat > site/app-chauffeur/sw.js <<'EOF'
+          const CACHE = 'dm-company-chauffeur-v1';
+          const APP_SHELL = ['./', './index.html', './manifest.webmanifest'];
+          self.addEventListener('install', event => {
+            event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
+          });
+          self.addEventListener('activate', event => {
+            event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+          });
+          self.addEventListener('fetch', event => {
+            if (event.request.method !== 'GET') return;
+            event.respondWith(fetch(event.request).then(response => {
+              const copy = response.clone();
+              caches.open(CACHE).then(cache => cache.put(event.request, copy));
+              return response;
+            }).catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html'))));
+          });
+          EOF
+
+          cat > site/app-chauffeur/icons/icon.svg <<'EOF'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <rect width="512" height="512" rx="96" fill="#070707"/>
+            <rect x="18" y="18" width="476" height="476" rx="82" fill="none" stroke="#d4af37" stroke-width="12"/>
+            <text x="256" y="245" text-anchor="middle" font-family="Arial,sans-serif" font-size="82" font-weight="900" letter-spacing="8" fill="#d4af37">D.M.</text>
+            <text x="256" y="325" text-anchor="middle" font-family="Arial,sans-serif" font-size="54" font-weight="800" letter-spacing="5" fill="#f5f5f5">COMPANY</text>
+            <path d="M125 365h262" stroke="#d4af37" stroke-width="8" stroke-linecap="round"/>
+          </svg>
+          EOF
+
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('site/app-chauffeur/index.html')
+          s = p.read_text()
+          marker = '<meta name="theme-color" content="#070707">'
+          if 'manifest.webmanifest' not in s:
+              s = s.replace(marker, marker + '\n<link rel="manifest" href="./manifest.webmanifest">\n<link rel="icon" href="./icons/icon.svg" type="image/svg+xml">\n<meta name="mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n<meta name="apple-mobile-web-app-title" content="D.M. COMPANY">')
+          if "navigator.serviceWorker.register('./sw.js')" not in s:
+              s = s.replace('</script>\n</body>', "if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {})); }\n</script>\n</body>")
+          p.write_text(s)
+          PY
+
+      - name: Commit PWA setup
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/app-chauffeur
+          git diff --cached --quiet && exit 0
+          git commit -m "PWA ready for chauffeur app"
+          git push
