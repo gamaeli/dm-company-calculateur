@@ -1,0 +1,114 @@
+name: Configurer tarif VTC
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Mettre à jour la réservation et le tarif
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          site = Path('site/index.html')
+          text = site.read_text(encoding='utf-8')
+
+          old_note = 'Votre demande sera enregistrée et pourra être traitée depuis l\'espace chauffeur D.M. Company.'
+          new_note = 'Le tarif est calculé automatiquement selon la distance routière : 2,50 € / km.'
+          text = text.replace(old_note, new_note)
+
+          start = text.find('<script type="module">')
+          end = text.find('</script>', start)
+          if start == -1 or end == -1:
+              raise SystemExit('Bloc Firebase introuvable dans site/index.html')
+
+          new_module = r'''<script type="module">
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+          import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+          const firebaseConfig={apiKey:"AIzaSyCYcpKVa67-b1whsW3XFFvtTsto472Q_oc",authDomain:"dm-company-efc01.firebaseapp.com",projectId:"dm-company-efc01",storageBucket:"dm-company-efc01.firebasestorage.app",messagingSenderId:"374303883452",appId:"1:374303883452:web:01d04dae50f2464e6e10b9"};
+          const app=initializeApp(firebaseConfig),db=getFirestore(app);
+          const PRICE_PER_KM=2.5;
+          let mapsPromise=null;
+          function loadGoogleMaps(){
+            if(window.google&&window.google.maps)return Promise.resolve();
+            if(mapsPromise)return mapsPromise;
+            mapsPromise=new Promise((resolve,reject)=>{
+              const script=document.createElement('script');
+              script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent('AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE')+'&v=weekly';
+              script.async=true;script.defer=true;script.onload=resolve;script.onerror=()=>reject(new Error("Google Maps n'a pas pu être chargé."));
+              document.head.appendChild(script);
+            });
+            return mapsPromise;
+          }
+          async function calculatePrice(depart,destination){
+            await loadGoogleMaps();
+            return new Promise((resolve,reject)=>{
+              const service=new google.maps.DistanceMatrixService();
+              service.getDistanceMatrix({origins:[depart],destinations:[destination],travelMode:google.maps.TravelMode.DRIVING,unitSystem:google.maps.UnitSystem.METRIC},(response,status)=>{
+                if(status!=='OK'){reject(new Error('Distance impossible à calculer.'));return;}
+                const element=response?.rows?.[0]?.elements?.[0];
+                if(!element||element.status!=='OK'||!element.distance?.value){reject(new Error('Distance impossible à calculer.'));return;}
+                const distanceKm=Math.round((element.distance.value/1000)*100)/100;
+                const price=Math.round(distanceKm*PRICE_PER_KM*100)/100;
+                resolve({distanceKm,price});
+              });
+            });
+          }
+          document.getElementById("bookingForm").addEventListener("submit",async function(e){
+            e.preventDefault();
+            const button=this.querySelector('button[type="submit"]');
+            const nom=document.getElementById("nom").value.trim(),telephone=document.getElementById("telephone").value.trim(),date=document.getElementById("date").value,heure=document.getElementById("heure").value,depart=document.getElementById("depart").value.trim(),destination=document.getElementById("destination").value.trim(),passengers=document.getElementById("passengers").value,message=document.getElementById("message").value.trim();
+            if(button){button.disabled=true;button.textContent='CALCUL DE LA DISTANCE…'}
+            try{
+              const route=await calculatePrice(depart,destination);
+              await addDoc(collection(db,"reservations"),{customerName:nom,customerPhone:telephone,date,time:heure,pickup:depart,destination,passengers,notes:message,status:"pending",distanceKm:route.distanceKm,price:route.price,pricePerKm:PRICE_PER_KM,createdAt:serverTimestamp()});
+              alert(`Votre demande de réservation a bien été envoyée. Distance : ${route.distanceKm.toFixed(2).replace('.',',')} km — Tarif : ${route.price.toFixed(2).replace('.',',')} €. D.M. Company vous contactera prochainement.`);
+              document.getElementById("bookingForm").reset();
+            }catch(error){
+              console.error("Erreur réservation :",error);
+              alert("Impossible de calculer la distance ou d'envoyer la réservation. Vérifiez les adresses et réessayez.");
+            }finally{
+              if(button){button.disabled=false;button.textContent='ENVOYER MA DEMANDE'}
+            }
+          });
+          </script>'''
+          text = text[:start] + new_module + text[end+9:]
+          site.write_text(text, encoding='utf-8')
+
+          app = Path('site/app-chauffeur/index.html')
+          text = app.read_text(encoding='utf-8')
+          marker = "function statusOf(r){return r.status||'pending'}"
+          replacement = marker + "\nfunction formatDistance(v){return v===undefined||v===null||v===''?'-':Number(v).toFixed(2).replace('.',',')+' km'}\nfunction formatPrice(v){return v===undefined||v===null||v===''?'-':Number(v).toFixed(2).replace('.',',')+' €'}"
+          if marker not in text:
+              raise SystemExit('Marker statusOf introuvable dans app-chauffeur/index.html')
+          text = text.replace(marker,replacement,1)
+          text = text.replace('<div>✈️ <span>Vol :</span> ${esc(r.flightNumber||\'-\')}</div>','')
+          text = text.replace('<div>💶 <span>Prix :</span> <b class="money">${esc(r.price||\'-\')}</b></div>','<div>🛣️ <span>Distance :</span> ${formatDistance(r.distanceKm)}</div><div>💶 <span>Prix :</span> <b class="money">${formatPrice(r.price)}</b></div>')
+          text = text.replace('<div>💶 <span>Prix :</span> <b class="money">${esc(r.price||\'-\')}</b></div>','<div>🛣️ <span>Distance :</span> ${formatDistance(r.distanceKm)}</div><div>💶 <span>Prix :</span> <b class="money">${formatPrice(r.price)}</b></div>')
+          app.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Enregistrer les modifications
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "Aucune modification nécessaire."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/index.html site/app-chauffeur/index.html
+          git commit -m "Tarif automatique VTC a 2,50 EUR par km [skip ci]"
+          git push
