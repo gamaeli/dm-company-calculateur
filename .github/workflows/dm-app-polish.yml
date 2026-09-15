@@ -1,0 +1,38 @@
+name: D.M. App Chauffeur - Polish
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Appliquer le polissage visuel
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('site/app-chauffeur/index.html')
+          s = p.read_text(encoding='utf-8')
+          old = ".actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{flex:1;min-width:145px;padding:12px;border-radius:11px;border:1px solid #333;background:#191919;color:#ddd}.actions .accept{background:var(--gold);color:#080808;border-color:var(--gold);font-weight:900}.actions .danger{color:var(--red);border-color:#4d2d2d}.actions .waze{color:var(--gold);border-color:#584713}.actions .wa{color:#8fe2a4;border-color:#285a37}"
+          new = ".actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{flex:1;min-width:145px;padding:12px;border-radius:11px;border:1px solid #333;background:#191919;color:#ddd;transition:.18s;box-shadow:none}.actions button:hover{transform:translateY(-1px);filter:brightness(1.08)}.actions button:active{transform:translateY(0) scale(.99)}.actions .accept{background:var(--gold);color:#080808;border-color:var(--gold);font-weight:900;box-shadow:0 8px 24px #d4af3740}.actions .danger{background:#241616;color:var(--red);border-color:#6a3535;box-shadow:0 0 18px #ff8e8e12}.actions .waze{background:#211b0d;color:var(--gold);border-color:#806516;box-shadow:0 0 18px #d4af3718}.actions .wa{background:#132319;color:#8fe2a4;border-color:#356f45;box-shadow:0 0 18px #76d48b18}"
+          if old not in s:
+              raise SystemExit('Bloc CSS attendu introuvable; aucune modification effectuée.')
+          p.write_text(s.replace(old, new, 1), encoding='utf-8')
+          PY
+      - name: Commit des changements
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/app-chauffeur/index.html
+          if git diff --cached --quiet; then
+            echo "Aucune modification nécessaire."
+            exit 0
+          fi
+          git commit -m "Polir les boutons de l App-Chauffeur"
+          git push
