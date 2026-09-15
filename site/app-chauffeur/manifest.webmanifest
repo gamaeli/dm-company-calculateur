@@ -1,0 +1,14 @@
+{
+  "name": "D.M. COMPANY – CHAUFFEUR PRIVÉ",
+  "short_name": "D.M. COMPANY",
+  "lang": "fr-FR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070707",
+  "theme_color": "#070707",
+  "description": "Application chauffeur privé D.M. COMPANY",
+  "icons": [
+    {"src":"./icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
