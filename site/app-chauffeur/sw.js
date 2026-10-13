@@ -1,4 +1,4 @@
-const CACHE = 'dm-company-chauffeur-v6';
+const CACHE = 'dm-company-chauffeur-v7';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
