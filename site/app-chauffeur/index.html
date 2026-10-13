@@ -16,7 +16,7 @@
 </style>
 </head>
 <body>
-<section id="loginScreen" class="login"><div class="login-box"><div class="logo">D.M. COMPANY</div><div class="subtitle">ESPACE CHAUFFEUR PREMIUM</div><input id="email" class="field" type="email" placeholder="E-mail"><input id="password" class="field" type="password" placeholder="Mot de passe"><button id="loginBtn" class="primary">SE CONNECTER</button><div id="loginError" class="error"></div></div></section>
+<section id="loginScreen" class="login"><div class="login-box"><div class="logo">D.M. COMPANY</div><div class="subtitle">ESPACE CHAUFFEUR PREMIUM</div><input id="email" class="field" type="email" placeholder="E-mail"><input id="password" class="field" type="password" placeholder="Mot de passe"><button id="loginBtn" class="primary" onclick="document.getElementById('loginError').textContent='Le script de connexion ne s’est pas chargé. Fermez cette page et rouvrez le lien dans Safari.'">SE CONNECTER</button><div id="loginError" class="error"></div></div></section>
 <section id="appScreen" class="app hidden">
 <header class="header"><div class="brand">D.M. COMPANY</div><div class="header-actions"><button id="notifyBtn" class="icon-btn">🔔</button><button id="logoutBtn" class="outline">Déconnexion</button></div></header>
 <main class="main">
