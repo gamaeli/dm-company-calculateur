@@ -90,6 +90,8 @@ jobs:
           app = Path('site/app-chauffeur/index.html')
           text = app.read_text(encoding='utf-8')
           marker = "function statusOf(r){return r.status||'pending'}"
+          # Remove any previous copies first so this workflow is safe to run repeatedly.
+          text = re.sub(r"\nfunction formatDistance\(v\)\{[^\n]*\}\nfunction formatPrice\(v\)\{[^\n]*\}", "", text)
           replacement = marker + "\nfunction formatDistance(v){return v===undefined||v===null||v===''?'-':Number(v).toFixed(2).replace('.',',')+' km'}\nfunction formatPrice(v){return v===undefined||v===null||v===''?'-':Number(v).toFixed(2).replace('.',',')+' €'}"
           if marker not in text:
               raise SystemExit('Marker statusOf introuvable dans app-chauffeur/index.html')
