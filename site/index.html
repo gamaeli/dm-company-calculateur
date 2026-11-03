@@ -47,16 +47,17 @@ import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.g
 const firebaseConfig={apiKey:"AIzaSyCYcpKVa67-b1whsW3XFFvtTsto472Q_oc",authDomain:"dm-company-efc01.firebaseapp.com",projectId:"dm-company-efc01",storageBucket:"dm-company-efc01.firebasestorage.app",messagingSenderId:"374303883452",appId:"1:374303883452:web:01d04dae50f2464e6e10b9"};
 const app=initializeApp(firebaseConfig),db=getFirestore(app);
 const PRICE_PER_KM=2.5;
+let mapsPromise=null;
 function loadGoogleMaps(){
   if(window.google&&window.google.maps)return Promise.resolve();
-  if(window.__dmMapsPromise)return window.__dmMapsPromise;
-  window.__dmMapsPromise=new Promise((resolve,reject)=>{
+  if(mapsPromise)return mapsPromise;
+  mapsPromise=new Promise((resolve,reject)=>{
     const script=document.createElement('script');
-    script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent('AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE')+'&v=weekly&libraries=places';
-    script.async=true;script.defer=true;script.onload=resolve;script.onerror=()=>reject(new Error("Google Maps n'a pas pu être chargé. Vérifiez la clé API et la facturation Google Cloud."));
+    script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent('AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE')+'&v=weekly';
+    script.async=true;script.defer=true;script.onload=resolve;script.onerror=()=>reject(new Error("Google Maps n'a pas pu être chargé."));
     document.head.appendChild(script);
   });
-  return window.__dmMapsPromise;
+  return mapsPromise;
 }
 async function calculatePrice(depart,destination){
   await loadGoogleMaps();
