@@ -27,10 +27,18 @@ footer{padding:45px 0 25px;border-top:1px solid var(--border);background:#030303
 .dm-address-field{position:relative}.dm-address-suggestions{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:9999;background:#0b0b0b;border:1px solid #c9a45c;border-radius:5px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.55)}.dm-address-suggestion{padding:13px 15px;color:#f7f5ef;border-bottom:1px solid #292929;cursor:pointer;font-size:13px;line-height:1.4}.dm-address-suggestion:last-child{border-bottom:0}.dm-address-suggestion:hover,.dm-address-suggestion:active{background:#17130d;color:#e2c27b}.dm-address-suggestion-main{display:block;font-weight:600}.dm-address-suggestion-secondary{display:block;color:#888;font-size:11px;margin-top:2px}
 @media(max-width:900px){nav{display:none}.feature-grid,.cards,.airport-grid{grid-template-columns:1fr 1fr}.footer-grid{grid-template-columns:1fr}.gallery-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){section{padding:70px 0}.hero{background-position:65% center}.hero-content{padding:60px 0}h1{font-size:48px}.hero-text{font-size:15px}.feature-grid,.cards,.airport-grid,.form-grid{grid-template-columns:1fr}.feature{border-right:0;border-bottom:1px solid var(--border)}.field.full{grid-column:auto}.form{padding:22px}.section-title h2,.cta h2{font-size:30px}.buttons{flex-direction:column}.btn{width:100%}.paris-gallery{padding:60px 20px}.paris-gallery h2{font-size:24px}.gallery-grid{grid-template-columns:repeat(2,1fr)}.gallery-item{height:260px}}
+
+.language-switch{margin-left:14px;flex-shrink:0}
+.language-switch select{background:#101010;color:var(--gold2);border:1px solid var(--gold);border-radius:24px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;outline:none}
+.language-switch option{background:#101010;color:#fff}
+@media(max-width:760px){.nav{flex-wrap:wrap;padding:12px 0;gap:8px}.nav nav{order:3;width:100%;justify-content:center;gap:12px;flex-wrap:wrap}.nav nav a{font-size:11px}.language-switch{margin-left:auto}.logo{font-size:19px}}
 </style>
 </head>
 <body>
-<header><div class="container nav"><a href="#accueil" class="logo">D.M. COMPANY<span>VTC PARTICULIER PREMIUM</span></a><nav><a href="#accueil">Accueil</a><a href="#services">Nos services</a><a href="#aeroports">Aéroports</a><a href="#reservation">Réservation</a><a href="#contact">Contact</a><a href="#reservation" class="nav-wa">Réserver</a></nav></div></header>
+<header><div class="container nav"><a href="#accueil" class="logo">D.M. COMPANY<span>VTC PARTICULIER PREMIUM</span></a><nav><a href="#accueil">Accueil</a><a href="#services">Nos services</a><a href="#aeroports">Aéroports</a><a href="#reservation">Réservation</a><a href="#contact">Contact</a><a href="#reservation" class="nav-wa">Réserver</a></nav><div class="language-switch" aria-label="Choose language">
+<select id="languageSelect" aria-label="Language">
+<option value="fr">🇫🇷 Français</option><option value="pt">🇧🇷 Português</option><option value="en">🇬🇧 English</option>
+</select></div></div></header>
 <main>
 <section class="hero" id="accueil"><div class="container"><div class="hero-content"><div class="kicker">VTC PARTICULIER PREMIUM</div><h1>VOTRE TRAJET,<br><span>NOTRE PRIORITÉ</span></h1><p class="hero-text">D.M. Company vous accompagne dans tous vos déplacements avec confort, élégance, ponctualité et discrétion.</p><div class="buttons"><a href="#reservation" class="btn btn-gold">RÉSERVER MAINTENANT</a></div></div></div></section>
 <section class="features"><div class="container feature-grid"><div class="feature"><strong>VÉHICULE PREMIUM</strong><small>BYD SEAL</small></div><div class="feature"><strong>CHAUFFEUR PRIVÉE</strong><small>Service personnalisé</small></div><div class="feature"><strong>CONFORT &amp; SÉCURITÉ</strong><small>À chaque trajet</small></div><div class="feature"><strong>PONCTUALITÉ</strong><small>Votre temps compte</small></div></div></section>
@@ -77,22 +85,105 @@ document.getElementById("bookingForm").addEventListener("submit",async function(
   e.preventDefault();
   const button=this.querySelector('button[type="submit"]');
   const nom=document.getElementById("nom").value.trim(),telephone=document.getElementById("telephone").value.trim(),date=document.getElementById("date").value,heure=document.getElementById("heure").value,depart=document.getElementById("depart").value.trim(),destination=document.getElementById("destination").value.trim(),passengers=document.getElementById("passengers").value,message=document.getElementById("message").value.trim();
-  if(button){button.disabled=true;button.textContent='CALCUL DE LA DISTANCE…'}
+  if(button){button.disabled=true;button.textContent=({fr:'CALCUL DE LA DISTANCE…',pt:'CALCULANDO A DISTÂNCIA…',en:'CALCULATING DISTANCE…'})[document.documentElement.lang||'fr'];}
   try{
     const route=await calculatePrice(depart,destination);
     await addDoc(collection(db,"reservations"),{customerName:nom,customerPhone:telephone,date,time:heure,pickup:depart,destination,passengers,notes:message,status:"pending",distanceKm:route.distanceKm,price:route.price,pricePerKm:PRICE_PER_KM,createdAt:serverTimestamp()});
-    alert(`Votre demande de réservation a bien été envoyée. Distance : ${route.distanceKm.toFixed(2).replace('.',',')} km — Tarif : ${route.price.toFixed(2).replace('.',',')} €. D.M. Company vous contactera prochainement.`);
+    const lang=document.documentElement.lang||'fr';
+    const success={
+      fr:`Votre demande de réservation a bien été envoyée. Distance : ${route.distanceKm.toFixed(2).replace('.',',')} km — Tarif : ${route.price.toFixed(2).replace('.',',')} €. D.M. Company vous contactera prochainement.`,
+      pt:`Sua solicitação de reserva foi enviada. Distância: ${route.distanceKm.toFixed(2)} km — Valor: € ${route.price.toFixed(2)}. A D.M. Company entrará em contato em breve.`,
+      en:`Your booking request has been sent. Distance: ${route.distanceKm.toFixed(2)} km — Fare: €${route.price.toFixed(2)}. D.M. Company will contact you shortly.`
+    };alert(success[lang]);
     document.getElementById("bookingForm").reset();
   }catch(error){
     console.error("Erreur réservation :",error);
-    alert("Impossible de calculer la distance ou d'envoyer la réservation. Vérifiez les adresses et réessayez.");
+    alert(({fr:"Impossible de calculer la distance ou d'envoyer la réservation. Vérifiez les adresses et réessayez.",pt:"Não foi possível calcular a distância ou enviar a reserva. Verifique os endereços e tente novamente.",en:"Unable to calculate the distance or send the booking. Please check the addresses and try again."})[document.documentElement.lang||"fr"]);
   }finally{
-    if(button){button.disabled=false;button.textContent='ENVOYER MA DEMANDE'}
+    if(button){button.disabled=false;button.textContent=({fr:'ENVOYER MA DEMANDE',pt:'ENVIAR MINHA SOLICITAÇÃO',en:'SEND MY REQUEST'})[document.documentElement.lang||'fr']}
   }
 });
 </script>
 <script>
-(function(){const GOOGLE_MAPS_API_KEY="AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE";const fields=[document.getElementById("depart"),document.getElementById("destination")].filter(Boolean);if(!fields.length)return;let placesLib=null,loadingPromise=null;function loadGoogleMaps(){if(window.google&&window.google.maps)return Promise.resolve();if(window.__dmMapsPromise)return window.__dmMapsPromise;window.__dmMapsPromise=new Promise((resolve,reject)=>{const script=document.createElement("script");script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(GOOGLE_MAPS_API_KEY)+"&v=weekly&libraries=places";script.async=true;script.defer=true;script.onload=resolve;script.onerror=()=>reject(new Error("Google Maps n'a pas pu être carregado. Vérifiez la clé API et la facturation Google Cloud."));document.head.appendChild(script)});return window.__dmMapsPromise}async function loadPlaces(){if(placesLib)return placesLib;await loadGoogleMaps();placesLib=await google.maps.importLibrary("places");return placesLib}function setupField(input){const wrapper=document.createElement("div");wrapper.className="dm-address-field";input.parentNode.insertBefore(wrapper,input);wrapper.appendChild(input);const dropdown=document.createElement("div");dropdown.className="dm-address-suggestions";dropdown.hidden=true;wrapper.appendChild(dropdown);let sessionToken=null,timer=null,requestId=0;function closeSuggestions(){dropdown.innerHTML="";dropdown.hidden=true}function createSessionToken(){const Token=placesLib.AutocompleteSessionToken;sessionToken=new Token()}function showSuggestions(items){dropdown.innerHTML="";if(!items.length){closeSuggestions();return}items.slice(0,6).forEach(suggestion=>{const prediction=suggestion.placePrediction;if(!prediction)return;const item=document.createElement("div");item.className="dm-address-suggestion";const main=document.createElement("span");main.className="dm-address-suggestion-main";main.textContent=prediction.mainText?.toString?.()||prediction.text?.toString?.()||"";const secondary=document.createElement("span");secondary.className="dm-address-suggestion-secondary";secondary.textContent=prediction.secondaryText?.toString?.()||"";item.appendChild(main);item.appendChild(secondary);item.addEventListener("mousedown",async ev=>{ev.preventDefault();try{const place=prediction.toPlace();await place.fetchFields({fields:["formattedAddress"]});input.value=place.formattedAddress||prediction.text?.toString?.()||input.value}catch(error){input.value=prediction.text?.toString?.()||input.value}closeSuggestions()});dropdown.appendChild(item)});dropdown.hidden=false}async function query(value){const current=++requestId;if(!value||value.trim().length<2){closeSuggestions();return}try{await loadPlaces();if(current!==requestId)return;if(!sessionToken)createSessionToken();const {suggestions}=await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({input:value,sessionToken,language:"fr",includedRegionCodes:["fr"]});if(current!==requestId)return;showSuggestions(suggestions||[])}catch(error){console.error("Google Maps autocomplete:",error);closeSuggestions()}}input.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(()=>query(input.value),220)});input.addEventListener("focus",()=>{if(input.value.trim().length>=2)query(input.value)});input.addEventListener("blur",()=>setTimeout(closeSuggestions,180));input.addEventListener("keydown",ev=>{if(ev.key==="Escape")closeSuggestions()})}fields.forEach(setupField)})();
+(function(){const GOOGLE_MAPS_API_KEY="AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE";const fields=[document.getElementById("depart"),document.getElementById("destination")].filter(Boolean);if(!fields.length)return;let placesLib=null,loadingPromise=null;function loadGoogleMaps(){if(window.google&&window.google.maps)return Promise.resolve();if(window.__dmMapsPromise)return window.__dmMapsPromise;window.__dmMapsPromise=new Promise((resolve,reject)=>{const script=document.createElement("script");script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(GOOGLE_MAPS_API_KEY)+"&v=weekly&libraries=places";script.async=true;script.defer=true;script.onload=resolve;script.onerror=()=>reject(new Error("Google Maps n'a pas pu être carregado. Vérifiez la clé API et la facturation Google Cloud."));document.head.appendChild(script)});return window.__dmMapsPromise}async function loadPlaces(){if(placesLib)return placesLib;await loadGoogleMaps();placesLib=await google.maps.importLibrary("places");return placesLib}function setupField(input){const wrapper=document.createElement("div");wrapper.className="dm-address-field";input.parentNode.insertBefore(wrapper,input);wrapper.appendChild(input);const dropdown=document.createElement("div");dropdown.className="dm-address-suggestions";dropdown.hidden=true;wrapper.appendChild(dropdown);let sessionToken=null,timer=null,requestId=0;function closeSuggestions(){dropdown.innerHTML="";dropdown.hidden=true}function createSessionToken(){const Token=placesLib.AutocompleteSessionToken;sessionToken=new Token()}function showSuggestions(items){dropdown.innerHTML="";if(!items.length){closeSuggestions();return}items.slice(0,6).forEach(suggestion=>{const prediction=suggestion.placePrediction;if(!prediction)return;const item=document.createElement("div");item.className="dm-address-suggestion";const main=document.createElement("span");main.className="dm-address-suggestion-main";main.textContent=prediction.mainText?.toString?.()||prediction.text?.toString?.()||"";const secondary=document.createElement("span");secondary.className="dm-address-suggestion-secondary";secondary.textContent=prediction.secondaryText?.toString?.()||"";item.appendChild(main);item.appendChild(secondary);item.addEventListener("mousedown",async ev=>{ev.preventDefault();try{const place=prediction.toPlace();await place.fetchFields({fields:["formattedAddress"]});input.value=place.formattedAddress||prediction.text?.toString?.()||input.value}catch(error){input.value=prediction.text?.toString?.()||input.value}closeSuggestions()});dropdown.appendChild(item)});dropdown.hidden=false}async function query(value){const current=++requestId;if(!value||value.trim().length<2){closeSuggestions();return}try{await loadPlaces();if(current!==requestId)return;if(!sessionToken)createSessionToken();const {suggestions}=await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({input:value,sessionToken,language:document.documentElement.lang||"fr",includedRegionCodes:["fr"]});if(current!==requestId)return;showSuggestions(suggestions||[])}catch(error){console.error("Google Maps autocomplete:",error);closeSuggestions()}}input.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(()=>query(input.value),220)});input.addEventListener("focus",()=>{if(input.value.trim().length>=2)query(input.value)});input.addEventListener("blur",()=>setTimeout(closeSuggestions,180));input.addEventListener("keydown",ev=>{if(ev.key==="Escape")closeSuggestions()})}fields.forEach(setupField)})();
 </script>
+
+<script>
+(function(){
+const translations={
+fr:{},
+pt:{
+"Accueil":"Início","Nos services":"Nossos serviços","Aéroports":"Aeroportos","Réservation":"Reservas","Contact":"Contato","Réserver":"Reservar",
+"VTC PARTICULIER PREMIUM":"VTC PREMIUM PRIVADO","VÉHICULE PREMIUM":"VEÍCULO PREMIUM","BYD SEAL":"BYD SEAL","CHAUFFEUR PRIVÉE":"MOTORISTA PARTICULAR","Service personnalisé":"Serviço personalizado","CONFORT & SÉCURITÉ":"CONFORTO E SEGURANÇA","À chaque trajet":"Em cada viagem","PONCTUALITÉ":"PONTUALIDADE","Votre temps compte":"Seu tempo importa","NOS SERVICES":"NOSSOS SERVIÇOS","TRANSFERTS":"TRASLADOS","Paris — Tour Eiffel":"Paris — Torre Eiffel","Château de Versailles":"Palácio de Versalhes","Mont-Saint-Michel — Normandie":"Monte Saint-Michel — Normandia","Château de Chambord — Val de Loire":"Castelo de Chambord — Vale do Loire","Annecy — Alpes françaises":"Annecy — Alpes Franceses","Lyon — Basilique Notre-Dame de Fourvière":"Lyon — Basílica de Notre-Dame de Fourvière","VOTRE TRAJET,":"SUA VIAGEM,","NOTRE PRIORITÉ":"NOSSA PRIORIDADE",
+"D.M. Company vous accompagne dans tous vos déplacements avec confort, élégance, ponctualité et discrétion.":"A D.M. Company acompanha você em todos os seus deslocamentos com conforto, elegância, pontualidade e discrição.",
+"RÉSERVER MAINTENANT":"RESERVAR AGORA","Un service pensé pour vous":"Um serviço pensado para você","Des trajets privés et professionnels adaptés à vos besoins.":"Viagens particulares e profissionais adaptadas às suas necessidades.",
+"Transferts aéroports":"Traslados para aeroportos","CDG, Orly, Beauvais et Le Bourget. Prise en charge et dépose à l'adresse souhaitée.":"CDG, Orly, Beauvais e Le Bourget. Embarque e desembarque no endereço desejado.",
+"Gares & hôtels":"Estações e hotéis","Transferts depuis ou vers les principales gares et hôtels de Paris et sa région.":"Traslados de ou para as principais estações e hotéis de Paris e região.",
+"Déplacements pro":"Viagens profissionais","Un service discret et ponctuel pour vos rendez-vous, réunions et déplacements professionnels.":"Um serviço discreto e pontual para seus compromissos, reuniões e viagens profissionais.",
+"Mise à disposition":"Motorista à disposição","Chauffeur privée à l'heure ou à la demi-journée selon vos besoins.":"Motorista particular por hora ou meio período, conforme sua necessidade.",
+"LA FRANCE À VOTRE RYTHME":"A FRANÇA NO SEU RITMO","De Paris aux plus beaux sites de France, voyagez avec élégance.":"De Paris aos lugares mais bonitos da França, viaje com elegância.",
+"Aéroports desservis":"Aeroportos atendidos","Réservez votre transfert privé en toute simplicité.":"Reserve seu traslado particular com facilidade.",
+"Demander une réservation":"Solicitar uma reserva","Remplissez le formulaire et envoyez votre demande directement à D.M. Company.":"Preencha o formulário e envie sua solicitação diretamente à D.M. Company.",
+"Nom":"Nome","Téléphone":"Telefone","Date":"Data","Heure":"Horário","Départ":"Partida","Destination":"Destino","Nombre de passagers":"Número de passageiros","Message":"Mensagem",
+"Choisissez le nombre":"Escolha a quantidade","1 passager":"1 passageiro","2 passagers":"2 passageiros","3 passagers":"3 passageiros","4 passagers":"4 passageiros",
+"ENVOYER MA DEMANDE":"ENVIAR MINHA SOLICITAÇÃO","Le tarif est calculé automatiquement selon la distance routière : 2,50 € / km.":"O preço é calculado automaticamente conforme a distância rodoviária: 2,50 € / km.",
+"Besoin d'un chauffeur privé ?":"Precisa de um motorista particular?","Réservez votre trajet avec D.M. Company.":"Reserve sua viagem com a D.M. Company.","RÉSERVER":"RESERVAR",
+"Confort · Élégance · Ponctualité":"Conforto · Elegância · Pontualidade","Des déplacements privés et professionnels dans toute la France.":"Deslocamentos particulares e profissionais em toda a França.",
+"Navigation":"Navegação","Contact & informations":"Contato e informações","📱 Téléphone :":"📱 Telefone:","✉️ Email :":"✉️ E-mail:","📍 Service VTC — France":"📍 Serviço VTC — França","© 2026 D.M. Company — VTC Premium. Tous droits réservés.":"© 2026 D.M. Company — VTC Premium. Todos os direitos reservados."
+},
+en:{
+"Accueil":"Home","Nos services":"Our services","Aéroports":"Airports","Réservation":"Booking","Contact":"Contact","Réserver":"Book now",
+"VTC PARTICULIER PREMIUM":"PREMIUM PRIVATE DRIVER","VÉHICULE PREMIUM":"PREMIUM VEHICLE","BYD SEAL":"BYD SEAL","CHAUFFEUR PRIVÉE":"PRIVATE CHAUFFEUR","Service personnalisé":"Personalised service","CONFORT & SÉCURITÉ":"COMFORT & SAFETY","À chaque trajet":"On every journey","PONCTUALITÉ":"PUNCTUALITY","Votre temps compte":"Your time matters","NOS SERVICES":"OUR SERVICES","TRANSFERTS":"TRANSFERS","Paris — Tour Eiffel":"Paris — Eiffel Tower","Château de Versailles":"Palace of Versailles","Mont-Saint-Michel — Normandie":"Mont-Saint-Michel — Normandy","Château de Chambord — Val de Loire":"Château de Chambord — Loire Valley","Annecy — Alpes françaises":"Annecy — French Alps","Lyon — Basilique Notre-Dame de Fourvière":"Lyon — Basilica of Notre-Dame de Fourvière","VOTRE TRAJET,":"YOUR JOURNEY,","NOTRE PRIORITÉ":"OUR PRIORITY",
+"D.M. Company vous accompagne dans tous vos déplacements avec confort, élégance, ponctualité et discrétion.":"D.M. Company accompanies you on every journey with comfort, elegance, punctuality and discretion.",
+"RÉSERVER MAINTENANT":"BOOK NOW","Un service pensé pour vous":"A service designed for you","Des trajets privés et professionnels adaptés à vos besoins.":"Private and business journeys tailored to your needs.",
+"Transferts aéroports":"Airport transfers","CDG, Orly, Beauvais et Le Bourget. Prise en charge et dépose à l'adresse souhaitée.":"CDG, Orly, Beauvais and Le Bourget. Pick-up and drop-off at your chosen address.",
+"Gares & hôtels":"Stations & hotels","Transferts depuis ou vers les principales gares et hôtels de Paris et sa région.":"Transfers to and from major train stations and hotels in Paris and the surrounding area.",
+"Déplacements pro":"Business travel","Un service discret et ponctuel pour vos rendez-vous, réunions et déplacements professionnels.":"A discreet and punctual service for appointments, meetings and business trips.",
+"Mise à disposition":"Chauffeur on demand","Chauffeur privée à l'heure ou à la demi-journée selon vos besoins.":"Private chauffeur by the hour or half-day, according to your needs.",
+"LA FRANCE À VOTRE RYTHME":"FRANCE AT YOUR PACE","De Paris aux plus beaux sites de France, voyagez avec élégance.":"From Paris to France's most beautiful destinations, travel in style.",
+"Aéroports desservis":"Airports served","Réservez votre transfert privé en toute simplicité.":"Book your private transfer with ease.",
+"Demander une réservation":"Request a booking","Remplissez le formulaire et envoyez votre demande directement à D.M. Company.":"Complete the form and send your request directly to D.M. Company.",
+"Nom":"Name","Téléphone":"Phone","Date":"Date","Heure":"Time","Départ":"Pick-up","Destination":"Destination","Nombre de passagers":"Number of passengers","Message":"Message",
+"Choisissez le nombre":"Select the number","1 passager":"1 passenger","2 passagers":"2 passengers","3 passagers":"3 passengers","4 passagers":"4 passengers",
+"ENVOYER MA DEMANDE":"SEND MY REQUEST","Le tarif est calculé automatiquement selon la distance routière : 2,50 € / km.":"The fare is automatically calculated based on road distance: €2.50 / km.",
+"Besoin d'un chauffeur privé ?":"Need a private chauffeur?","Réservez votre trajet avec D.M. Company.":"Book your journey with D.M. Company.","RÉSERVER":"BOOK",
+"Confort · Élégance · Ponctualité":"Comfort · Elegance · Punctuality","Des déplacements privés et professionnels dans toute la France.":"Private and business travel throughout France.",
+"Navigation":"Navigation","Contact & informations":"Contact & information","📱 Téléphone :":"📱 Phone:","✉️ Email :":"✉️ Email:","📍 Service VTC — France":"📍 Private driver service — France","© 2026 D.M. Company — VTC Premium. Tous droits réservés.":"© 2026 D.M. Company — Premium private driver. All rights reserved."
+}
+};
+const placeholders={
+fr:["Votre nom","Votre téléphone","Adresse de départ","Adresse d'arrivée","Informations complémentaires"],
+pt:["Seu nome","Seu telefone","Endereço de partida","Endereço de destino","Informações adicionais"],
+en:["Your name","Your phone number","Pick-up address","Destination address","Additional information"]
+};
+const originalPlaceholders=placeholders.fr;
+const select=document.getElementById('languageSelect');
+function applyLanguage(lang){
+const dict=translations[lang]||{};
+const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+let node;
+while(node=walker.nextNode()){
+const key=node.nodeValue.trim();
+if(dict[key]) node.nodeValue=node.nodeValue.replace(key,dict[key]);
+else {
+for(const [language,map] of Object.entries(translations)){
+const reverse=Object.entries(map).find(([,translated])=>translated===key);
+if(reverse){const replacement=lang==='fr'?reverse[0]:(dict[reverse[0]]||reverse[0]);node.nodeValue=node.nodeValue.replace(key,replacement);break;}
+}
+}
+}
+['nom','telephone','depart','destination','message'].forEach((id,i)=>{
+const el=document.getElementById(id);if(el)el.placeholder=placeholders[lang][i];
+});
+document.documentElement.lang=lang;
+document.title=lang==='pt'?'D.M. Company — VTC Premium':lang==='en'?'D.M. Company — Premium Private Driver':'D.M. Company — VTC Premium';
+try{localStorage.setItem('dm-language',lang)}catch(e){}
+}
+select.addEventListener('change',()=>applyLanguage(select.value));
+let saved='fr';try{saved=localStorage.getItem('dm-language')||'fr'}catch(e){}
+select.value=saved;applyLanguage(saved);
+})();
+</script>
+
 </body>
 </html>
