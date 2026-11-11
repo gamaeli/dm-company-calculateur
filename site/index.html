@@ -85,22 +85,17 @@ document.getElementById("bookingForm").addEventListener("submit",async function(
   e.preventDefault();
   const button=this.querySelector('button[type="submit"]');
   const nom=document.getElementById("nom").value.trim(),telephone=document.getElementById("telephone").value.trim(),date=document.getElementById("date").value,heure=document.getElementById("heure").value,depart=document.getElementById("depart").value.trim(),destination=document.getElementById("destination").value.trim(),passengers=document.getElementById("passengers").value,message=document.getElementById("message").value.trim();
-  if(button){button.disabled=true;button.textContent=({fr:'CALCUL DE LA DISTANCE…',pt:'CALCULANDO A DISTÂNCIA…',en:'CALCULATING DISTANCE…'})[document.documentElement.lang||'fr'];}
+  if(button){button.disabled=true;button.textContent='CALCUL DE LA DISTANCE…'}
   try{
     const route=await calculatePrice(depart,destination);
     await addDoc(collection(db,"reservations"),{customerName:nom,customerPhone:telephone,date,time:heure,pickup:depart,destination,passengers,notes:message,status:"pending",distanceKm:route.distanceKm,price:route.price,pricePerKm:PRICE_PER_KM,createdAt:serverTimestamp()});
-    const lang=document.documentElement.lang||'fr';
-    const success={
-      fr:`Votre demande de réservation a bien été envoyée. Distance : ${route.distanceKm.toFixed(2).replace('.',',')} km — Tarif : ${route.price.toFixed(2).replace('.',',')} €. D.M. Company vous contactera prochainement.`,
-      pt:`Sua solicitação de reserva foi enviada. Distância: ${route.distanceKm.toFixed(2)} km — Valor: € ${route.price.toFixed(2)}. A D.M. Company entrará em contato em breve.`,
-      en:`Your booking request has been sent. Distance: ${route.distanceKm.toFixed(2)} km — Fare: €${route.price.toFixed(2)}. D.M. Company will contact you shortly.`
-    };alert(success[lang]);
+    alert(`Votre demande de réservation a bien été envoyée. Distance : ${route.distanceKm.toFixed(2).replace('.',',')} km — Tarif : ${route.price.toFixed(2).replace('.',',')} €. D.M. Company vous contactera prochainement.`);
     document.getElementById("bookingForm").reset();
   }catch(error){
     console.error("Erreur réservation :",error);
-    alert(({fr:"Impossible de calculer la distance ou d'envoyer la réservation. Vérifiez les adresses et réessayez.",pt:"Não foi possível calcular a distância ou enviar a reserva. Verifique os endereços e tente novamente.",en:"Unable to calculate the distance or send the booking. Please check the addresses and try again."})[document.documentElement.lang||"fr"]);
+    alert("Impossible de calculer la distance ou d'envoyer la réservation. Vérifiez les adresses et réessayez.");
   }finally{
-    if(button){button.disabled=false;button.textContent=({fr:'ENVOYER MA DEMANDE',pt:'ENVIAR MINHA SOLICITAÇÃO',en:'SEND MY REQUEST'})[document.documentElement.lang||'fr']}
+    if(button){button.disabled=false;button.textContent='ENVOYER MA DEMANDE'}
   }
 });
 </script>
