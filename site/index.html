@@ -75,7 +75,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyCYcpKVa67-b1whsW3XFFvtTsto472Q_oc",authDomain:"dm-company-efc01.firebaseapp.com",projectId:"dm-company-efc01",storageBucket:"dm-company-efc01.firebasestorage.app",messagingSenderId:"374303883452",appId:"1:374303883452:web:01d04dae50f2464e6e10b9"};
 const app=initializeApp(firebaseConfig),db=getFirestore(app);
-const PRICE_PER_KM=2.5;
+const PRICE_PER_KM=2.9;
 let mapsPromise=null;
 function loadGoogleMaps(){
   if(window.google&&window.google.maps)return Promise.resolve();
@@ -142,7 +142,7 @@ pt:{
 "Demander une réservation":"Solicitar uma reserva","Remplissez le formulaire et envoyez votre demande directement à D.M. Company.":"Preencha o formulário e envie sua solicitação diretamente à D.M. Company.",
 "Nom":"Nome","Téléphone":"Telefone","Date":"Data","Heure":"Horário","Départ":"Partida","Destination":"Destino","Nombre de passagers":"Número de passageiros","Message":"Mensagem",
 "Choisissez le nombre":"Escolha a quantidade","1 passager":"1 passageiro","2 passagers":"2 passageiros","3 passagers":"3 passageiros","4 passagers":"4 passageiros",
-"ENVOYER MA DEMANDE":"ENVIAR MINHA SOLICITAÇÃO","Le tarif est calculé automatiquement selon la distance routière : 2,50 € / km.":"O preço é calculado automaticamente conforme a distância rodoviária: 2,50 € / km.",
+"ENVOYER MA DEMANDE":"ENVIAR MINHA SOLICITAÇÃO","Le tarif est calculé automatiquement selon la distance routière : 2,90 € / km.":"O preço é calculado automaticamente conforme a distância rodoviária: 2,90 € / km.",
 "Besoin d'un chauffeur privé ?":"Precisa de um motorista particular?","Réservez votre trajet avec D.M. Company.":"Reserve sua viagem com a D.M. Company.","RÉSERVER":"RESERVAR",
 "Confort · Élégance · Ponctualité":"Conforto · Elegância · Pontualidade","Des déplacements privés et professionnels dans toute la France.":"Deslocamentos particulares e profissionais em toda a França.",
 "Navigation":"Navegação","Contact & informations":"Contato e informações","📱 Téléphone :":"📱 Telefone:","✉️ Email :":"✉️ E-mail:","📍 Service VTC — France":"📍 Serviço VTC — França","© 2026 D.M. Company — VTC Premium. Tous droits réservés.":"© 2026 D.M. Company — VTC Premium. Todos os direitos reservados."
@@ -161,7 +161,7 @@ en:{
 "Demander une réservation":"Request a booking","Remplissez le formulaire et envoyez votre demande directement à D.M. Company.":"Complete the form and send your request directly to D.M. Company.",
 "Nom":"Name","Téléphone":"Phone","Date":"Date","Heure":"Time","Départ":"Pick-up","Destination":"Destination","Nombre de passagers":"Number of passengers","Message":"Message",
 "Choisissez le nombre":"Select the number","1 passager":"1 passenger","2 passagers":"2 passengers","3 passagers":"3 passengers","4 passagers":"4 passengers",
-"ENVOYER MA DEMANDE":"SEND MY REQUEST","Le tarif est calculé automatiquement selon la distance routière : 2,50 € / km.":"The fare is automatically calculated based on road distance: €2.50 / km.",
+"ENVOYER MA DEMANDE":"SEND MY REQUEST","Le tarif est calculé automatiquement selon la distance routière : 2,90 € / km.":"The fare is automatically calculated based on road distance: €2.90 / km.",
 "Besoin d'un chauffeur privé ?":"Need a private chauffeur?","Réservez votre trajet avec D.M. Company.":"Book your journey with D.M. Company.","RÉSERVER":"BOOK",
 "Confort · Élégance · Ponctualité":"Comfort · Elegance · Punctuality","Des déplacements privés et professionnels dans toute la France.":"Private and business travel throughout France.",
 "Navigation":"Navigation","Contact & informations":"Contact & information","📱 Téléphone :":"📱 Phone:","✉️ Email :":"✉️ Email:","📍 Service VTC — France":"📍 Private driver service — France","© 2026 D.M. Company — VTC Premium. Tous droits réservés.":"© 2026 D.M. Company — Premium private driver. All rights reserved."
