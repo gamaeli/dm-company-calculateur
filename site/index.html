@@ -35,7 +35,7 @@ section{padding:90px 0}.section-title{text-align:center;margin-bottom:48px}.sect
 .reservation{background:radial-gradient(circle at 50% 0%,rgba(201,164,92,.10),transparent 40%),#050505}.form{max-width:850px;margin:auto;border:1px solid var(--border);padding:35px;background:#0b0b0b}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}label{color:#aaa;font-size:11px;letter-spacing:1px;text-transform:uppercase}input,select,textarea{width:100%;background:#050505;border:1px solid #303030;color:#fff;padding:14px;border-radius:4px;outline:none;font:inherit}input:focus,select:focus,textarea:focus{border-color:var(--gold)}textarea{min-height:110px;resize:vertical}.form-note{margin-top:15px;color:#777;font-size:11px}
 .cta{text-align:center;border-top:1px solid var(--border)}.cta h2{font-size:38px;margin-bottom:15px}.cta p{color:#aaa;margin-bottom:25px}
 footer{padding:45px 0 25px;border-top:1px solid var(--border);background:#030303}.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:30px}.footer-logo{color:var(--gold2);font-size:22px;font-weight:bold;letter-spacing:3px;margin-bottom:10px}footer p,footer a{color:#888;font-size:13px}footer h4{color:#fff;margin-bottom:12px}.copyright{border-top:1px solid #1c1c1c;margin-top:30px;padding-top:20px;color:#555;font-size:11px;text-align:center}
-.dm-address-field{position:relative}.dm-address-suggestions{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:9999;background:#0b0b0b;border:1px solid #c9a45c;border-radius:5px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.55)}.dm-address-suggestion{padding:13px 15px;color:#f7f5ef;border-bottom:1px solid #292929;cursor:pointer;font-size:13px;line-height:1.4}.dm-address-suggestion:last-child{border-bottom:0}.dm-address-suggestion:hover,.dm-address-suggestion:active{background:#17130d;color:#e2c27b}.dm-address-suggestion-main{display:block;font-weight:600}.dm-address-suggestion-secondary{display:block;color:#888;font-size:11px;margin-top:2px}
+.dm-gps-row{display:flex;gap:9px;align-items:stretch}.dm-gps-row input{flex:1;min-width:0}.dm-gps-button{background:#17130d;color:#e2c27b;border:1px solid #c9a45c;border-radius:4px;padding:0 14px;font:600 11px Arial,sans-serif;letter-spacing:.4px;cursor:pointer;white-space:nowrap}.dm-gps-button:disabled{opacity:.6;cursor:wait}.dm-gps-status{display:block;min-height:16px;color:#c9a45c;font-size:11px}.dm-address-field{position:relative}.dm-address-suggestions{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:9999;background:#0b0b0b;border:1px solid #c9a45c;border-radius:5px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.55)}.dm-address-suggestion{padding:13px 15px;color:#f7f5ef;border-bottom:1px solid #292929;cursor:pointer;font-size:13px;line-height:1.4}.dm-address-suggestion:last-child{border-bottom:0}.dm-address-suggestion:hover,.dm-address-suggestion:active{background:#17130d;color:#e2c27b}.dm-address-suggestion-main{display:block;font-weight:600}.dm-address-suggestion-secondary{display:block;color:#888;font-size:11px;margin-top:2px}
 @media(max-width:900px){nav{display:none}.feature-grid,.cards,.airport-grid{grid-template-columns:1fr 1fr}.footer-grid{grid-template-columns:1fr}.gallery-grid{grid-template-columns:repeat(2,1fr)}.tour-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){section{padding:70px 0}.hero{background-position:65% center}.hero-content{padding:60px 0}h1{font-size:48px}.hero-text{font-size:15px}.feature-grid,.cards,.airport-grid,.form-grid{grid-template-columns:1fr}.feature{border-right:0;border-bottom:1px solid var(--border)}.field.full{grid-column:auto}.form{padding:22px}.section-title h2,.cta h2{font-size:30px}.buttons{flex-direction:column}.btn{width:100%}.paris-gallery{padding:60px 20px}.paris-gallery h2{font-size:24px}.gallery-grid{grid-template-columns:repeat(2,1fr)}.tour-grid{grid-template-columns:repeat(2,1fr)}.gallery-item{height:245px}}
 
@@ -66,7 +66,7 @@ footer{padding:45px 0 25px;border-top:1px solid var(--border);background:#030303
 <button type="button" class="gallery-item tour-card" data-tour="Bruges & Belgique"><img src="https://raw.githubusercontent.com/gamaeli/dm-company-calculateur/main/site/Bruges-CAPA.jpeg" alt="Bruges en Belgique — photo de couverture"><span class="gallery-caption"><strong>Bruges & Belgique</strong><small>Une escapade romantique en Belgique</small><em>Découvrir & réserver</em></span></button>
 <button type="button" class="gallery-item tour-card" data-tour="Tours personnalisés – France"><img src="https://raw.githubusercontent.com/gamaeli/dm-company-calculateur/main/Vila%20Alpina%20a%CC%80%20Beira%20do%20Lago%20Turquesa.png" alt="Annecy et les Alpes françaises"><span class="gallery-caption"><strong>Tours personnalisés – France</strong><small>Un itinéraire imaginé selon vos envies</small><em>Découvrir & réserver</em></span></button>
 </div><p class="tour-conditions">Tous nos tours sont proposés sur devis personnalisé, selon la destination, la durée et le nombre de passagers (jusqu’à 4 personnes). Les billets, dégustations, visites guidées et éventuels frais d’hébergement sont précisés dans la proposition avant confirmation.</p></section><section class="airports" id="aeroports"><div class="container"><div class="section-title"><div class="kicker">TRANSFERTS</div><h2>Aéroports desservis</h2><p>Réservez votre transfert privé en toute simplicité.</p></div><div class="airport-grid"><div class="airport"><strong>CDG</strong><span>Charles de Gaulle</span></div><div class="airport"><strong>ORY</strong><span>Paris Orly</span></div><div class="airport"><strong>BVA</strong><span>Paris Beauvais</span></div><div class="airport"><strong>LBG</strong><span>Le Bourget</span></div></div></div></section>
-<section class="reservation" id="reservation"><div class="container"><div class="section-title"><div class="kicker">RÉSERVATION</div><h2>Demander une réservation</h2><p>Remplissez le formulaire et envoyez votre demande directement à D.M. Company.</p></div><form class="form" id="bookingForm"><div class="form-grid"><div class="field"><label>Nom</label><input type="text" id="nom" required placeholder="Votre nom"></div><div class="field"><label>Téléphone</label><input type="tel" id="telephone" required placeholder="Votre téléphone"></div><div class="field"><label>Date</label><input type="date" id="date" required></div><div class="field"><label>Heure</label><input type="time" id="heure" required></div><div class="field full"><label>Départ</label><input type="text" id="depart" required placeholder="Adresse de départ"></div><div class="field full"><label>Destination</label><input type="text" id="destination" required placeholder="Adresse d'arrivée"></div><div class="field full"><label>Nombre de passagers</label><select id="passengers" required><option value="">Choisissez le nombre</option><option value="1">1 passager</option><option value="2">2 passagers</option><option value="3">3 passagers</option><option value="4">4 passagers</option></select></div><div class="field full"><label>Message</label><textarea id="message" placeholder="Informations complémentaires"></textarea></div></div><br><button type="submit" class="btn btn-gold">ENVOYER MA DEMANDE</button><div class="form-note">Pour les tours privés, le tarif est communiqué dans un devis personnalisé avant confirmation de la réservation.</div></form></div></section>
+<section class="reservation" id="reservation"><div class="container"><div class="section-title"><div class="kicker">RÉSERVATION</div><h2>Demander une réservation</h2><p>Remplissez le formulaire et envoyez votre demande directement à D.M. Company.</p></div><form class="form" id="bookingForm"><div class="form-grid"><div class="field"><label>Nom</label><input type="text" id="nom" required placeholder="Votre nom"></div><div class="field"><label>Téléphone</label><input type="tel" id="telephone" required placeholder="Votre téléphone"></div><div class="field"><label>Date</label><input type="date" id="date" required></div><div class="field"><label>Heure</label><input type="time" id="heure" required></div><div class="field full"><label>Départ</label><div class="dm-gps-row"><input type="text" id="depart" required placeholder="Adresse de départ"><button type="button" class="dm-gps-button" id="useCurrentLocation">◎ GPS — Ma position</button></div><small class="dm-gps-status" id="gpsStatus" aria-live="polite"></small></div><div class="field full"><label>Destination</label><input type="text" id="destination" required placeholder="Adresse d'arrivée"></div><div class="field full"><label>Nombre de passagers</label><select id="passengers" required><option value="">Choisissez le nombre</option><option value="1">1 passager</option><option value="2">2 passagers</option><option value="3">3 passagers</option><option value="4">4 passagers</option></select></div><div class="field full"><label>Message</label><textarea id="message" placeholder="Informations complémentaires"></textarea></div></div><br><button type="submit" class="btn btn-gold">ENVOYER MA DEMANDE</button><div class="form-note">Pour les tours privés, le tarif est communiqué dans un devis personnalisé avant confirmation de la réservation.</div></form></div></section>
 <section class="cta" id="contact"><div class="container"><div class="kicker">D.M. COMPANY</div><h2>Besoin d'un chauffeur privé ?</h2><p>Réservez votre trajet avec D.M. Company.</p><div class="buttons" style="justify-content:center"><a href="#reservation" class="btn btn-gold">RÉSERVER</a></div></div></section>
 </main>
 <footer><div class="container"><div class="footer-grid"><div><div class="footer-logo">D.M. COMPANY</div><p>VTC PARTICULIER PREMIUM</p><p style="margin-top:10px">Confort · Élégance · Ponctualité</p><p style="margin-top:12px">Des déplacements privés et professionnels dans toute la France.</p></div><div><h4>Navigation</h4><p><a href="#accueil">Accueil</a></p><p><a href="#services">Nos services</a></p><p><a href="#aeroports">Aéroports</a></p><p><a href="#reservation">Réservation</a></p></div><div><h4>Contact &amp; informations</h4><p>📱 Téléphone : <a href="tel:+33671349056">06 71 34 90 56</a></p><p>✉️ Email : <a href="mailto:dm.company.vtc@gmail.com">dm.company.vtc@gmail.com</a></p><p>📍 Service VTC — France</p><p style="margin-top:10px;color:#aaa;font-size:12px">SIRET : 10967242800017</p></div></div><div class="copyright">© 2026 D.M. Company — VTC Premium. Tous droits réservés.</div></div></footer>
@@ -75,7 +75,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyCYcpKVa67-b1whsW3XFFvtTsto472Q_oc",authDomain:"dm-company-efc01.firebaseapp.com",projectId:"dm-company-efc01",storageBucket:"dm-company-efc01.firebasestorage.app",messagingSenderId:"374303883452",appId:"1:374303883452:web:01d04dae50f2464e6e10b9"};
 const app=initializeApp(firebaseConfig),db=getFirestore(app);
-const PRICE_PER_KM=2.5;
+const PRICE_PER_KM=2.9;
 let mapsPromise=null;
 function loadGoogleMaps(){
   if(window.google&&window.google.maps)return Promise.resolve();
@@ -121,7 +121,88 @@ document.getElementById("bookingForm").addEventListener("submit",async function(
 });
 </script>
 <script>
-(function(){const GOOGLE_MAPS_API_KEY="AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE";const fields=[document.getElementById("depart"),document.getElementById("destination")].filter(Boolean);if(!fields.length)return;let placesLib=null,loadingPromise=null;function loadGoogleMaps(){if(window.google&&window.google.maps)return Promise.resolve();if(window.__dmMapsPromise)return window.__dmMapsPromise;window.__dmMapsPromise=new Promise((resolve,reject)=>{const script=document.createElement("script");script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(GOOGLE_MAPS_API_KEY)+"&v=weekly&libraries=places";script.async=true;script.defer=true;script.onload=resolve;script.onerror=()=>reject(new Error("Google Maps n'a pas pu être carregado. Vérifiez la clé API et la facturation Google Cloud."));document.head.appendChild(script)});return window.__dmMapsPromise}async function loadPlaces(){if(placesLib)return placesLib;await loadGoogleMaps();placesLib=await google.maps.importLibrary("places");return placesLib}function setupField(input){const wrapper=document.createElement("div");wrapper.className="dm-address-field";input.parentNode.insertBefore(wrapper,input);wrapper.appendChild(input);const dropdown=document.createElement("div");dropdown.className="dm-address-suggestions";dropdown.hidden=true;wrapper.appendChild(dropdown);let sessionToken=null,timer=null,requestId=0;function closeSuggestions(){dropdown.innerHTML="";dropdown.hidden=true}function createSessionToken(){const Token=placesLib.AutocompleteSessionToken;sessionToken=new Token()}function showSuggestions(items){dropdown.innerHTML="";if(!items.length){closeSuggestions();return}items.slice(0,6).forEach(suggestion=>{const prediction=suggestion.placePrediction;if(!prediction)return;const item=document.createElement("div");item.className="dm-address-suggestion";const main=document.createElement("span");main.className="dm-address-suggestion-main";main.textContent=prediction.mainText?.toString?.()||prediction.text?.toString?.()||"";const secondary=document.createElement("span");secondary.className="dm-address-suggestion-secondary";secondary.textContent=prediction.secondaryText?.toString?.()||"";item.appendChild(main);item.appendChild(secondary);item.addEventListener("mousedown",async ev=>{ev.preventDefault();try{const place=prediction.toPlace();await place.fetchFields({fields:["formattedAddress"]});input.value=place.formattedAddress||prediction.text?.toString?.()||input.value}catch(error){input.value=prediction.text?.toString?.()||input.value}closeSuggestions()});dropdown.appendChild(item)});dropdown.hidden=false}async function query(value){const current=++requestId;if(!value||value.trim().length<2){closeSuggestions();return}try{await loadPlaces();if(current!==requestId)return;if(!sessionToken)createSessionToken();const {suggestions}=await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({input:value,sessionToken,language:document.documentElement.lang||"fr",includedRegionCodes:["fr"]});if(current!==requestId)return;showSuggestions(suggestions||[])}catch(error){console.error("Google Maps autocomplete:",error);closeSuggestions()}}input.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(()=>query(input.value),220)});input.addEventListener("focus",()=>{if(input.value.trim().length>=2)query(input.value)});input.addEventListener("blur",()=>setTimeout(closeSuggestions,180));input.addEventListener("keydown",ev=>{if(ev.key==="Escape")closeSuggestions()})}fields.forEach(setupField)})();
+(function(){
+const GOOGLE_MAPS_API_KEY="AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE";
+const fields=[document.getElementById("depart"),document.getElementById("destination")].filter(Boolean);
+const gpsButton=document.getElementById("useCurrentLocation"),gpsStatus=document.getElementById("gpsStatus");
+let placesLib=null;
+function loadGoogleMaps(){
+ if(window.google&&window.google.maps)return Promise.resolve();
+ if(window.__dmMapsPromise)return window.__dmMapsPromise;
+ window.__dmMapsPromise=new Promise((resolve,reject)=>{
+  const script=document.createElement("script");
+  script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(GOOGLE_MAPS_API_KEY)+"&v=weekly";
+  script.async=true;script.defer=true;script.onload=resolve;
+  script.onerror=()=>reject(new Error("Google Maps n'a pas pu être chargé. Vérifiez la clé API, les restrictions et la facturation Google Cloud."));
+  document.head.appendChild(script);
+ });
+ return window.__dmMapsPromise;
+}
+async function loadPlaces(){await loadGoogleMaps();if(!placesLib)placesLib=await google.maps.importLibrary("places");return placesLib}
+function setupField(input){
+ const wrapper=document.createElement("div");wrapper.className="dm-address-field";input.parentNode.insertBefore(wrapper,input);wrapper.appendChild(input);
+ const dropdown=document.createElement("div");dropdown.className="dm-address-suggestions";dropdown.hidden=true;wrapper.appendChild(dropdown);
+ let sessionToken=null,timer=null,requestId=0;
+ function closeSuggestions(){dropdown.innerHTML="";dropdown.hidden=true}
+ function showSuggestions(items){
+  dropdown.innerHTML="";
+  (items||[]).slice(0,6).forEach(suggestion=>{
+   const prediction=suggestion.placePrediction;if(!prediction)return;
+   const item=document.createElement("div");item.className="dm-address-suggestion";
+   const main=document.createElement("span");main.className="dm-address-suggestion-main";main.textContent=prediction.mainText?.toString?.()||prediction.text?.toString?.()||"";
+   const secondary=document.createElement("span");secondary.className="dm-address-suggestion-secondary";secondary.textContent=prediction.secondaryText?.toString?.()||"";
+   item.append(main,secondary);
+   item.addEventListener("mousedown",async ev=>{ev.preventDefault();try{const place=prediction.toPlace();await place.fetchFields({fields:["formattedAddress"]});input.value=place.formattedAddress||prediction.text?.toString?.()||input.value}catch(error){input.value=prediction.text?.toString?.()||input.value}closeSuggestions()});
+   dropdown.appendChild(item);
+  });
+  dropdown.hidden=!dropdown.children.length;
+ }
+ async function query(value){
+  const current=++requestId;if(!value||value.trim().length<2){closeSuggestions();return}
+  try{
+   const lib=await loadPlaces();if(current!==requestId)return;
+   if(!sessionToken)sessionToken=new lib.AutocompleteSessionToken();
+   const result=await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({input:value,sessionToken,language:document.documentElement.lang||"fr",includedRegionCodes:["fr"]});
+   if(current!==requestId)return;showSuggestions(result.suggestions||[]);
+  }catch(error){console.error("Google Places autocomplete:",error);closeSuggestions()}
+ }
+ input.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(()=>query(input.value),250)});
+ input.addEventListener("focus",()=>{if(input.value.trim().length>=2)query(input.value)});
+ input.addEventListener("blur",()=>setTimeout(closeSuggestions,180));
+ input.addEventListener("keydown",ev=>{if(ev.key==="Escape")closeSuggestions()});
+}
+fields.forEach(setupField);
+if(gpsButton){
+ gpsButton.addEventListener("click",()=>{
+  if(!navigator.geolocation){if(gpsStatus)gpsStatus.textContent="Geolocalização não disponível neste navegador.";return}
+  gpsButton.disabled=true;if(gpsStatus)gpsStatus.textContent="Obtendo sua localização…";
+  navigator.geolocation.getCurrentPosition(async position=>{
+   try{
+    await loadGoogleMaps();
+    const geocoder=new google.maps.Geocoder();
+    const point={lat:position.coords.latitude,lng:position.coords.longitude};
+    geocoder.geocode({location:point},(results,status)=>{
+     if(status==="OK"&&results&&results[0]){
+      document.getElementById("depart").value=results[0].formatted_address;
+      if(gpsStatus)gpsStatus.textContent="Localização GPS adicionada ao endereço de partida.";
+     }else{
+      if(gpsStatus)gpsStatus.textContent="GPS encontrado, mas não foi possível converter em endereço. Tente digitar o endereço.";
+      console.error("Reverse geocoding:",status);
+     }
+     gpsButton.disabled=false;
+    });
+   }catch(error){
+    console.error("GPS:",error);if(gpsStatus)gpsStatus.textContent="Não foi possível carregar o serviço de mapas. Verifique a configuração Google Maps.";
+    gpsButton.disabled=false;
+   }
+  },error=>{
+   const messages={1:"Permita o acesso à localização nas configurações do navegador.",2:"Não foi possível determinar sua localização. Verifique o GPS.",3:"A localização demorou muito. Tente novamente."};
+   if(gpsStatus)gpsStatus.textContent=messages[error.code]||"Não foi possível obter a localização.";
+   gpsButton.disabled=false;
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:60000});
+ });
+}
+})();
 </script>
 
 <script>
