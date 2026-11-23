@@ -184,10 +184,27 @@ function setupField(input){
     const text=p.text?.toString?.()||"";
     return {label:p.mainText?.toString?.()||text,address:text,secondary:p.secondaryText?.toString?.()||""};
    }).filter(p=>p.address&&!local.some(a=>a.address===p.address));
-   render([...local,...googleOptions]);
+   if(googleOptions.length){render([...local,...googleOptions]);return;}
+   const fallback=await fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&countrycodes=fr&limit=6&q="+encodeURIComponent(value),{headers:{"Accept-Language":"fr"}});
+   if(!fallback.ok)throw new Error("Recherche secondaire indisponible.");
+   const results=await fallback.json();if(id!==requestId)return;
+   const otherOptions=results.map(p=>{
+    const address=p.display_name||"";
+    const parts=address.split(",").map(x=>x.trim());
+    return {label:p.name||parts[0]||address,address,secondary:parts.slice(1).join(", ")};
+   }).filter(p=>p.address&&!local.some(a=>a.address===p.address));
+   render([...local,...otherOptions]);
   }catch(error){
-   console.error("D.M. Company — Google Places:",error);
-   if(id===requestId)render(local);
+   console.error("D.M. Company — recherche d'adresses:",error);
+   if(id===requestId){
+    try{
+     const fallback=await fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&countrycodes=fr&limit=6&q="+encodeURIComponent(value),{headers:{"Accept-Language":"fr"}});
+     if(!fallback.ok)throw new Error("Recherche secondaire indisponible.");
+     const results=await fallback.json();if(id!==requestId)return;
+     const otherOptions=results.map(p=>{const address=p.display_name||"";const parts=address.split(",").map(x=>x.trim());return {label:p.name||parts[0]||address,address,secondary:parts.slice(1).join(", ")};}).filter(p=>p.address&&!local.some(a=>a.address===p.address));
+     render([...local,...otherOptions]);
+    }catch(fallbackError){console.error("D.M. Company — recherche secondaire:",fallbackError);if(id===requestId)render(local);}
+   }
   }
  }
  input.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(()=>search(input.value),250);});
