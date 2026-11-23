@@ -105,7 +105,7 @@ async function calculatePrice(depart,destination){
 document.getElementById("bookingForm").addEventListener("submit",async function(e){
   e.preventDefault();
   const button=this.querySelector('button[type="submit"]');
-  const nom=document.getElementById("nom").value.trim(),telephone=document.getElementById("phoneCountry").value+document.getElementById("telephone").value.replace(/[^0-9]/g,""),date=document.getElementById("date").value,heure=document.getElementById("heure").value,depart=document.getElementById("depart").value.trim(),destination=document.getElementById("destination").value.trim(),passengers=document.getElementById("passengers").value,message=document.getElementById("message").value.trim();
+  const nom=document.getElementById("nom").value.trim(),telephone=document.getElementById("telephone").value.trim(),date=document.getElementById("date").value,heure=document.getElementById("heure").value,depart=document.getElementById("depart").value.trim(),destination=document.getElementById("destination").value.trim(),passengers=document.getElementById("passengers").value,message=document.getElementById("message").value.trim();
   if(button){button.disabled=true;button.textContent='CALCUL DE LA DISTANCE…'}
   try{
     const route=await calculatePrice(depart,destination);
