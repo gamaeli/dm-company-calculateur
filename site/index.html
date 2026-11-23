@@ -82,7 +82,7 @@ function loadGoogleMaps(){
   if(mapsPromise)return mapsPromise;
   mapsPromise=new Promise((resolve,reject)=>{
     const script=document.createElement('script');
-    script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent('AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE')+'&v=weekly&libraries=places';
+    script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent('AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE')+'&v=weekly';
     script.async=true;script.defer=true;script.onload=resolve;script.onerror=()=>reject(new Error("Google Maps n'a pas pu être chargé."));
     document.head.appendChild(script);
   });
