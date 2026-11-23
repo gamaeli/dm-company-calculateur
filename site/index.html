@@ -124,26 +124,28 @@ document.getElementById("bookingForm").addEventListener("submit",async function(
 (function(){
 const GOOGLE_MAPS_API_KEY="AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE";
 const fields=[document.getElementById("depart"),document.getElementById("destination")].filter(Boolean);
-let placesLibraryPromise=null;
-window.dmLoadGoogleMaps=function(){
- if(window.dmGoogleMapsPromise)return window.dmGoogleMapsPromise;
- window.dmGoogleMapsPromise=new Promise((resolve,reject)=>{
-  if(window.google&&window.google.maps&&window.google.maps.importLibrary){resolve();return;}
-  const script=document.createElement("script");
-  script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(GOOGLE_MAPS_API_KEY)+"&v=weekly&loading=async&libraries=places";
-  script.async=true;
-  script.onload=()=>{
-   if(!window.google||!google.maps||!google.maps.importLibrary){reject(new Error("Biblioteca Google Maps/Places indisponível."));return;}
-   resolve();
-  };
-  script.onerror=()=>reject(new Error("Google Maps/Places não carregou. Verifique a chave API, as APIs ativadas e o faturamento Google Cloud."));
-  document.head.appendChild(script);
- });
- return window.dmGoogleMapsPromise;
-};
+const airports=[
+ {label:"Aéroport Paris-Charles-de-Gaulle (CDG)",address:"Aéroport Paris-Charles-de-Gaulle, 95700 Roissy-en-France, France",keywords:"cdg charles de gaulle roissy"},
+ {label:"Aéroport de Paris-Orly (ORY)",address:"Aéroport de Paris-Orly, 94390 Orly, France",keywords:"ory orly"},
+ {label:"Aéroport Paris-Beauvais (BVA)",address:"Aéroport Paris-Beauvais, 60000 Tillé, France",keywords:"bva beauvais tille"},
+ {label:"Aéroport Paris-Le Bourget (LBG)",address:"Aéroport Paris-Le Bourget, 93350 Le Bourget, France",keywords:"lbg le bourget"}
+];
+let mapsPromise=null,placesLibraryPromise=null;
 function loadPlaces(){
  if(!placesLibraryPromise){
-  placesLibraryPromise=window.dmLoadGoogleMaps().then(()=>google.maps.importLibrary("places"));
+  placesLibraryPromise=new Promise((resolve,reject)=>{
+   if(window.google&&google.maps&&google.maps.importLibrary){google.maps.importLibrary("places").then(resolve).catch(reject);return;}
+   if(mapsPromise)return mapsPromise.then(()=>google.maps.importLibrary("places")).then(resolve).catch(reject);
+   mapsPromise=new Promise((ok,no)=>{
+    const script=document.createElement("script");
+    script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(GOOGLE_MAPS_API_KEY)+"&v=weekly&loading=async";
+    script.async=true;script.defer=true;
+    script.onload=()=>window.google&&google.maps&&google.maps.importLibrary?ok():no(new Error("Google Maps indisponible."));
+    script.onerror=()=>no(new Error("Google Maps/Places n'a pas pu être chargé. Vérifiez la clé API, les APIs activées et la facturation Google Cloud."));
+    document.head.appendChild(script);
+   });
+   mapsPromise.then(()=>google.maps.importLibrary("places")).then(resolve).catch(reject);
+  });
  }
  return placesLibraryPromise;
 }
@@ -153,43 +155,45 @@ function setupField(input){
  const dropdown=document.createElement("div");dropdown.className="dm-address-suggestions";dropdown.hidden=true;wrapper.appendChild(dropdown);
  let timer=null,requestId=0;
  function close(){dropdown.innerHTML="";dropdown.hidden=true;}
- function render(predictions){
+ function render(items){
   dropdown.innerHTML="";
-  (predictions||[]).slice(0,6).forEach(prediction=>{
-   const item=document.createElement("div");item.className="dm-address-suggestion";
-   const main=document.createElement("span");main.className="dm-address-suggestion-main";
-   main.textContent=prediction.mainText?.toString()||prediction.text.toString();
-   const secondary=document.createElement("span");secondary.className="dm-address-suggestion-secondary";
-   secondary.textContent=prediction.secondaryText?.toString()||"";
+  items.slice(0,8).forEach(option=>{
+   const item=document.createElement("div");item.className="dm-address-suggestion";item.setAttribute("role","option");
+   const main=document.createElement("span");main.className="dm-address-suggestion-main";main.textContent=option.label;
+   const secondary=document.createElement("span");secondary.className="dm-address-suggestion-secondary";secondary.textContent=option.secondary||"";
    item.append(main,secondary);
-   item.addEventListener("mousedown",ev=>{
-    ev.preventDefault();input.value=prediction.text.toString();close();
-    input.dispatchEvent(new Event("change",{bubbles:true}));
-   });
+   item.addEventListener("mousedown",ev=>{ev.preventDefault();input.value=option.address;close();input.dispatchEvent(new Event("change",{bubbles:true}));});
    dropdown.appendChild(item);
   });
   dropdown.hidden=dropdown.children.length===0;
  }
+ function airportMatches(value){
+  const q=(value||"").trim().toLocaleLowerCase("fr");
+  return airports.filter(a=>!q||(a.label+" "+a.address+" "+a.keywords).toLocaleLowerCase("fr").includes(q))
+   .map(a=>({label:a.label,address:a.address,secondary:a.address}));
+ }
  async function search(value){
-  const id=++requestId;
-  if(!value||value.trim().length<3){close();return;}
+  const id=++requestId,local=airportMatches(value);
+  if(!value||value.trim().length<3){render(local);return;}
+  render(local);
   try{
    const places=await loadPlaces();if(id!==requestId)return;
-   const {suggestions}=await places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
-    input:value,
-    includedRegionCodes:["fr"]
-   });
+   const {suggestions=[]}=await places.AutocompleteSuggestion.fetchAutocompleteSuggestions({input:value,includedRegionCodes:["fr"]});
    if(id!==requestId)return;
-   const predictions=(suggestions||[]).map(item=>item.placePrediction).filter(Boolean);
-   render(predictions);
-  }catch(error){console.error("D.M. Company — Google Places:",error);close();}
+   const googleOptions=suggestions.map(s=>s.placePrediction).filter(Boolean).map(p=>{
+    const text=p.text?.toString?.()||"";
+    return {label:p.mainText?.toString?.()||text,address:text,secondary:p.secondaryText?.toString?.()||""};
+   }).filter(p=>p.address&&!local.some(a=>a.address===p.address));
+   render([...local,...googleOptions]);
+  }catch(error){
+   console.error("D.M. Company — Google Places:",error);
+   if(id===requestId)render(local);
+  }
  }
- input.addEventListener("input",()=>{
-  clearTimeout(timer);timer=setTimeout(()=>search(input.value),250);
- });
- input.addEventListener("focus",()=>{if(input.value.trim().length>=3)search(input.value)});
- input.addEventListener("blur",()=>setTimeout(close,180));
- input.addEventListener("keydown",ev=>{if(ev.key==="Escape")close()});
+ input.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(()=>search(input.value),250);});
+ input.addEventListener("focus",()=>search(input.value));
+ input.addEventListener("blur",()=>setTimeout(close,220));
+ input.addEventListener("keydown",ev=>{if(ev.key==="Escape")close();});
 }
 fields.forEach(setupField);
 })();
