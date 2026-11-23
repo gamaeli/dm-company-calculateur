@@ -82,7 +82,7 @@ function loadGoogleMaps(){
   if(mapsPromise)return mapsPromise;
   mapsPromise=new Promise((resolve,reject)=>{
     const script=document.createElement('script');
-    script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent('AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE')+'&v=weekly';
+    script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent('AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE')+'&v=weekly&libraries=places';
     script.async=true;script.defer=true;script.onload=resolve;script.onerror=()=>reject(new Error("Google Maps n'a pas pu être chargé."));
     document.head.appendChild(script);
   });
@@ -134,17 +134,20 @@ let mapsPromise=null,placesLibraryPromise=null;
 function loadPlaces(){
  if(!placesLibraryPromise){
   placesLibraryPromise=new Promise((resolve,reject)=>{
-   if(window.google&&google.maps&&google.maps.importLibrary){google.maps.importLibrary("places").then(resolve).catch(reject);return;}
-   if(mapsPromise)return mapsPromise.then(()=>google.maps.importLibrary("places")).then(resolve).catch(reject);
+   const ready=()=>window.google&&google.maps&&google.maps.places&&google.maps.places.AutocompleteService;
+   if(ready()){resolve(google.maps.places);return;}
+   if(window.google&&google.maps&&google.maps.importLibrary){
+    google.maps.importLibrary("places").then(resolve).catch(reject);return;
+   }
    mapsPromise=new Promise((ok,no)=>{
     const script=document.createElement("script");
-    script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(GOOGLE_MAPS_API_KEY)+"&v=weekly&loading=async";
+    script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(GOOGLE_MAPS_API_KEY)+"&v=weekly&libraries=places";
     script.async=true;script.defer=true;
-    script.onload=()=>window.google&&google.maps&&google.maps.importLibrary?ok():no(new Error("Google Maps indisponible."));
-    script.onerror=()=>no(new Error("Google Maps/Places n'a pas pu être chargé. Vérifiez la clé API, les APIs activées et la facturation Google Cloud."));
+    script.onload=()=>ready()?ok(google.maps.places):no(new Error("Google Maps carregou, mas a biblioteca Places não ficou disponível."));
+    script.onerror=()=>no(new Error("Não foi possível carregar Google Maps/Places. Verifique a chave API e as APIs autorizadas."));
     document.head.appendChild(script);
    });
-   mapsPromise.then(()=>google.maps.importLibrary("places")).then(resolve).catch(reject);
+   mapsPromise.then(resolve).catch(reject);
   });
  }
  return placesLibraryPromise;
@@ -178,16 +181,19 @@ function setupField(input){
   render(local);
   try{
    const places=await loadPlaces();if(id!==requestId)return;
-   const {suggestions=[]}=await places.AutocompleteSuggestion.fetchAutocompleteSuggestions({input:value,includedRegionCodes:["fr"]});
+   const service=new places.AutocompleteService();
+   const predictions=await new Promise((resolve,reject)=>service.getPlacePredictions({input:value,componentRestrictions:{country:"fr"},types:["geocode"]},(results,status)=>{
+    if(status==="OK"||status==="ZERO_RESULTS")resolve(results||[]);
+    else reject(new Error("Google Places: "+status));
+   }));
    if(id!==requestId)return;
-   const googleOptions=suggestions.map(s=>s.placePrediction).filter(Boolean).map(p=>{
-     const fullText=p.text?.toString?.()||"";
-     const main=p.mainText?.toString?.()||fullText;
-     const secondary=p.secondaryText?.toString?.()||"";
-     return {label:main,address:fullText,secondary};
-    }).filter(p=>p.address&&!local.some(a=>a.address===p.address));
-    render([...local,...googleOptions]);
-   }catch(error){
+   const googleOptions=predictions.map(p=>({
+    label:p.structured_formatting?.main_text||p.description,
+    address:p.description,
+    secondary:p.structured_formatting?.secondary_text||""
+   })).filter(p=>p.address&&!local.some(a=>a.address===p.address));
+   render([...local,...googleOptions]);
+  }catch(error){
     console.error("D.M. Company — Google Places:",error);
     if(id===requestId)render(local);
    }
