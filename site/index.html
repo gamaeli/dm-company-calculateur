@@ -74,8 +74,11 @@ footer{padding:45px 0 25px;border-top:1px solid var(--border);background:#030303
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import intlTelInput from "https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/+esm";
 const firebaseConfig={apiKey:"AIzaSyCYcpKVa67-b1whsW3XFFvtTsto472Q_oc",authDomain:"dm-company-efc01.firebaseapp.com",projectId:"dm-company-efc01",storageBucket:"dm-company-efc01.firebasestorage.app",messagingSenderId:"374303883452",appId:"1:374303883452:web:01d04dae50f2464e6e10b9"};
 const app=initializeApp(firebaseConfig),db=getFirestore(app);
+const phoneInput=document.getElementById("telephone");
+const phonePicker=intlTelInput(phoneInput,{initialCountry:"fr",separateDialCode:true,nationalMode:true,loadUtils:()=>import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js")});
 const PRICE_PER_KM=2.5;
 let mapsPromise=null;
 function loadGoogleMaps(){
@@ -106,7 +109,8 @@ async function calculatePrice(depart,destination){
 document.getElementById("bookingForm").addEventListener("submit",async function(e){
   e.preventDefault();
   const button=this.querySelector('button[type="submit"]');
-  const nom=document.getElementById("nom").value.trim(),telephone=document.getElementById("telephone").value.trim(),date=document.getElementById("date").value,heure=document.getElementById("heure").value,depart=document.getElementById("depart").value.trim(),destination=document.getElementById("destination").value.trim(),passengers=document.getElementById("passengers").value,message=document.getElementById("message").value.trim();
+  const nom=document.getElementById("nom").value.trim(),telephone=phonePicker.getNumber(),date=document.getElementById("date").value,heure=document.getElementById("heure").value,depart=document.getElementById("depart").value.trim(),destination=document.getElementById("destination").value.trim(),passengers=document.getElementById("passengers").value,message=document.getElementById("message").value.trim();
+   if(!phonePicker.isValidNumber()){alert("Veuillez saisir un numéro de téléphone international valide avec son indicatif pays.");phoneInput.focus();return;}
   if(button){button.disabled=true;button.textContent='CALCUL DE LA DISTANCE…'}
   try{
     const route=await calculatePrice(depart,destination);
