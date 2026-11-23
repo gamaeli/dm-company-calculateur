@@ -78,16 +78,25 @@ const app=initializeApp(firebaseConfig),db=getFirestore(app);
 const PRICE_PER_KM=2.5;
 let mapsPromise=null;
 function loadGoogleMaps(){
-  if(window.google&&window.google.maps)return Promise.resolve();
-  if(mapsPromise)return mapsPromise;
-  mapsPromise=new Promise((resolve,reject)=>{
-    const script=document.createElement('script');
-    script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent('AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE')+'&v=weekly';
-    script.async=true;script.defer=true;script.onload=resolve;script.onerror=()=>reject(new Error("Google Maps n'a pas pu être chargé."));
-    document.head.appendChild(script);
-  });
+  if(window.google&&window.google.maps&&window.google.maps.DistanceMatrixService)return Promise.resolve(window.google.maps);
+  if(window.dmGoogleMapsPromise)return window.dmGoogleMapsPromise;
+  if(!mapsPromise){
+    mapsPromise=new Promise((resolve,reject)=>{
+      const script=document.createElement('script');
+      script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent('AIzaSyA4kab5FyuqPAKrpS4rLx3ZE5mLLfTjCaE')+'&v=weekly&libraries=places';
+      script.async=true;script.defer=true;
+      script.onload=()=>{
+        if(!window.google||!google.maps){reject(new Error('Google Maps não inicializou.'));return;}
+        google.maps.importLibrary('places').then(()=>resolve(google.maps)).catch(reject);
+      };
+      script.onerror=()=>reject(new Error("Google Maps não pôde ser carregado. Verifique a chave e as APIs autorizadas."));
+      document.head.appendChild(script);
+    });
+    window.dmGoogleMapsPromise=mapsPromise;
+  }
   return mapsPromise;
 }
+window.dmLoadGoogleMaps=loadGoogleMaps;
 async function calculatePrice(depart,destination){
   await loadGoogleMaps();
   return new Promise((resolve,reject)=>{
@@ -130,25 +139,15 @@ const airports=[
  {label:"Aéroport Paris-Beauvais (BVA)",address:"Aéroport Paris-Beauvais, 60000 Tillé, France",keywords:"bva beauvais tille"},
  {label:"Aéroport Paris-Le Bourget (LBG)",address:"Aéroport Paris-Le Bourget, 93350 Le Bourget, France",keywords:"lbg le bourget"}
 ];
-let mapsPromise=null,placesLibraryPromise=null;
+let placesLibraryPromise=null;
 function loadPlaces(){
  if(!placesLibraryPromise){
-  placesLibraryPromise=new Promise((resolve,reject)=>{
-   const ready=()=>window.google&&google.maps&&google.maps.places&&google.maps.places.AutocompleteService;
-   if(ready()){resolve(google.maps.places);return;}
-   if(window.google&&google.maps&&google.maps.importLibrary){
-    google.maps.importLibrary("places").then(resolve).catch(reject);return;
-   }
-   mapsPromise=new Promise((ok,no)=>{
-    const script=document.createElement("script");
-    script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(GOOGLE_MAPS_API_KEY)+"&v=weekly&libraries=places";
-    script.async=true;script.defer=true;
-    script.onload=()=>ready()?ok(google.maps.places):no(new Error("Google Maps carregou, mas a biblioteca Places não ficou disponível."));
-    script.onerror=()=>no(new Error("Não foi possível carregar Google Maps/Places. Verifique a chave API e as APIs autorizadas."));
-    document.head.appendChild(script);
-   });
-   mapsPromise.then(resolve).catch(reject);
-  });
+  placesLibraryPromise=(async()=>{
+   if(typeof window.dmLoadGoogleMaps!=="function")throw new Error("Carregador compartilhado do Google Maps não foi inicializado.");
+   const maps=await window.dmLoadGoogleMaps();
+   if(maps.places&&maps.places.AutocompleteService)return maps.places;
+   return await maps.importLibrary("places");
+  })();
  }
  return placesLibraryPromise;
 }
